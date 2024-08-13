@@ -1,0 +1,289 @@
+[gd_scene load_steps=29 format=3 uid="uid://cs24c6bcipuux"]
+
+[ext_resource type="Texture2D" uid="uid://d3qoet7kbkvxj" path="res://woodfloor.jpg" id="1_o1cb3"]
+[ext_resource type="Script" path="res://world.gd" id="1_sier2"]
+[ext_resource type="PackedScene" uid="uid://uoq5r2lvraly" path="res://player.tscn" id="2_1d3v8"]
+[ext_resource type="Texture2D" uid="uid://bfec6aaoecgyu" path="res://nightsky.jpg" id="2_nj2dh"]
+[ext_resource type="PackedScene" uid="uid://p42ftxav826i" path="res://pause_menu.tscn" id="5_4j80j"]
+
+[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_cun67"]
+sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+
+[sub_resource type="Sky" id="Sky_i7dvd"]
+sky_material = SubResource("ProceduralSkyMaterial_cun67")
+
+[sub_resource type="Environment" id="Environment_vagyq"]
+background_mode = 2
+sky = SubResource("Sky_i7dvd")
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v8pu2"]
+albedo_color = Color(1, 1, 0.870588, 1)
+albedo_texture = ExtResource("1_o1cb3")
+metallic_specular = 0.84
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bgxsp"]
+cull_mode = 1
+albedo_texture = ExtResource("2_nj2dh")
+
+[sub_resource type="SphereMesh" id="SphereMesh_31n0u"]
+material = SubResource("StandardMaterial3D_bgxsp")
+radius = 100.0
+height = 100.0
+
+[sub_resource type="SphereShape3D" id="SphereShape3D_8n1gc"]
+radius = 4.0
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vqho6"]
+albedo_color = Color(1.05888e-06, 0.408754, 0.64967, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_evs0k"]
+material = SubResource("StandardMaterial3D_vqho6")
+radius = 4.0
+height = 8.0
+radial_segments = 32
+rings = 64
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o5lw2"]
+albedo_color = Color(0, 0.681845, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_8j85c"]
+material = SubResource("StandardMaterial3D_o5lw2")
+radius = 4.0
+height = 8.0
+radial_segments = 32
+rings = 64
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fyouj"]
+
+[sub_resource type="SphereMesh" id="SphereMesh_ijd4f"]
+material = SubResource("StandardMaterial3D_fyouj")
+radius = 4.0
+height = 8.0
+radial_segments = 32
+rings = 64
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_oaqrc"]
+albedo_color = Color(0.896529, 0.713264, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_ny6lm"]
+material = SubResource("StandardMaterial3D_oaqrc")
+radius = 4.0
+height = 8.0
+radial_segments = 32
+rings = 64
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xddph"]
+albedo_color = Color(0.615686, 0, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_kwlrb"]
+material = SubResource("StandardMaterial3D_xddph")
+radius = 4.0
+height = 8.0
+radial_segments = 32
+rings = 64
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_i28a3"]
+albedo_color = Color(0.355313, 0.355314, 0.355314, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_sv018"]
+material = SubResource("StandardMaterial3D_i28a3")
+radius = 4.0
+height = 8.0
+radial_segments = 32
+rings = 64
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2ccwq"]
+albedo_color = Color(0.939853, 0.10519, 1, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_7m86i"]
+material = SubResource("StandardMaterial3D_2ccwq")
+radius = 4.0
+height = 8.0
+radial_segments = 32
+rings = 64
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_odw4a"]
+albedo_color = Color(0.852827, 0.39218, 0, 1)
+
+[sub_resource type="SphereMesh" id="SphereMesh_ifb4w"]
+material = SubResource("StandardMaterial3D_odw4a")
+radius = 4.0
+height = 8.0
+radial_segments = 32
+rings = 64
+
+[node name="Root" type="Node3D"]
+script = ExtResource("1_sier2")
+
+[node name="World" type="Node3D" parent="."]
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="World"]
+environment = SubResource("Environment_vagyq")
+
+[node name="Player" parent="World" instance=ExtResource("2_1d3v8")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, 0)
+
+[node name="Level" type="Node3D" parent="World"]
+
+[node name="Floor" type="Node3D" parent="World/Level"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
+
+[node name="Floor1" type="CSGBox3D" parent="World/Level/Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 0, 25)
+size = Vector3(50, 0.1, 50)
+material = SubResource("StandardMaterial3D_v8pu2")
+
+[node name="Floor2" type="CSGBox3D" parent="World/Level/Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 0, -25)
+size = Vector3(50, 0.1, 50)
+material = SubResource("StandardMaterial3D_v8pu2")
+
+[node name="Floor3" type="CSGBox3D" parent="World/Level/Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 0, 25)
+size = Vector3(50, 0.1, 50)
+material = SubResource("StandardMaterial3D_v8pu2")
+
+[node name="Floor4" type="CSGBox3D" parent="World/Level/Floor"]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 0, -25)
+size = Vector3(50, 0.1, 50)
+material = SubResource("StandardMaterial3D_v8pu2")
+
+[node name="NightSky" type="MeshInstance3D" parent="World/Level"]
+transform = Transform3D(1, 0, 0, 0, -1, -8.74228e-08, 0, 8.74228e-08, -1, 0, 2, 0)
+mesh = SubResource("SphereMesh_31n0u")
+skeleton = NodePath("../..")
+
+[node name="Spotlights" type="Node3D" parent="World/Level"]
+
+[node name="SpotLight3D" type="SpotLight3D" parent="World/Level/Spotlights"]
+transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 75, 0)
+light_color = Color(0.924879, 0.677451, 0.401764, 1)
+light_energy = 100.0
+light_indirect_energy = 100.0
+light_size = 0.884
+light_specular = 0.0
+spot_range = 200.0
+spot_angle = 61.5
+
+[node name="SpotLight3D2" type="SpotLight3D" parent="World/Level/Spotlights"]
+transform = Transform3D(1, 0, 0, 0, 1.31134e-07, -1, 0, 1, 1.31134e-07, 0, -59, 0)
+light_color = Color(0.924879, 0.677451, 0.401764, 1)
+light_energy = 100.0
+light_indirect_energy = 100.0
+light_size = 0.884
+light_specular = 0.0
+spot_range = 200.0
+spot_angle = 61.5
+
+[node name="SpotLight3D3" type="SpotLight3D" parent="World/Level/Spotlights"]
+transform = Transform3D(1, 0, 0, 0, 1, 1.74846e-07, 0, -1.74846e-07, 1, 0, 44, 176)
+light_color = Color(0.924879, 0.677451, 0.401764, 1)
+light_energy = 100.0
+light_indirect_energy = 100.0
+light_size = 0.884
+light_specular = 0.0
+spot_range = 200.0
+spot_angle = 61.5
+
+[node name="SpotLight3D4" type="SpotLight3D" parent="World/Level/Spotlights"]
+transform = Transform3D(1, 0, 0, 0, -1, -2.83122e-07, 0, 2.83122e-07, -1, 0, 44, -75)
+light_color = Color(0.924879, 0.677451, 0.401764, 1)
+light_energy = 100.0
+light_indirect_energy = 100.0
+light_size = 0.884
+light_specular = 0.0
+spot_range = 200.0
+spot_angle = 61.5
+
+[node name="blueball" type="RigidBody3D" parent="World/Level" groups=["grabbable"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.8706, 13, -9.35161)
+gravity_scale = 0.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Level/blueball"]
+shape = SubResource("SphereShape3D_8n1gc")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="World/Level/blueball"]
+mesh = SubResource("SphereMesh_evs0k")
+
+[node name="greenball" type="RigidBody3D" parent="World/Level" groups=["grabbable"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.26846, 25.6803, -33.0818)
+gravity_scale = 0.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Level/greenball"]
+shape = SubResource("SphereShape3D_8n1gc")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="World/Level/greenball"]
+mesh = SubResource("SphereMesh_8j85c")
+
+[node name="whiteball" type="RigidBody3D" parent="World/Level" groups=["grabbable"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.1051, 13.0547, 18.5985)
+gravity_scale = 0.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Level/whiteball"]
+shape = SubResource("SphereShape3D_8n1gc")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="World/Level/whiteball"]
+mesh = SubResource("SphereMesh_ijd4f")
+
+[node name="yellowball" type="RigidBody3D" parent="World/Level" groups=["grabbable"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.1051, 4.05473, 34.5984)
+gravity_scale = 0.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Level/yellowball"]
+shape = SubResource("SphereShape3D_8n1gc")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="World/Level/yellowball"]
+mesh = SubResource("SphereMesh_ny6lm")
+
+[node name="redball" type="RigidBody3D" parent="World/Level" groups=["grabbable"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.6693, 23.0108, -33.7789)
+gravity_scale = 0.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Level/redball"]
+shape = SubResource("SphereShape3D_8n1gc")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="World/Level/redball"]
+mesh = SubResource("SphereMesh_kwlrb")
+
+[node name="grayball" type="RigidBody3D" parent="World/Level" groups=["grabbable"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -32.3307, 25.5093, 3.22114)
+gravity_scale = 0.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Level/grayball"]
+shape = SubResource("SphereShape3D_8n1gc")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="World/Level/grayball"]
+mesh = SubResource("SphereMesh_sv018")
+
+[node name="pinkball" type="RigidBody3D" parent="World/Level" groups=["grabbable"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.3307, 5.0108, -29.7789)
+gravity_scale = 0.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Level/pinkball"]
+shape = SubResource("SphereShape3D_8n1gc")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="World/Level/pinkball"]
+mesh = SubResource("SphereMesh_7m86i")
+
+[node name="orangeball" type="RigidBody3D" parent="World/Level" groups=["grabbable"]]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.3307, 5.0108, 14.2211)
+gravity_scale = 0.0
+
+[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Level/orangeball"]
+shape = SubResource("SphereShape3D_8n1gc")
+
+[node name="MeshInstance3D" type="MeshInstance3D" parent="World/Level/orangeball"]
+mesh = SubResource("SphereMesh_ifb4w")
+
+[node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="World"]
+
+[node name="PauseMenu" parent="." instance=ExtResource("5_4j80j")]
+visible = false
+
+[connection signal="pressed" from="PauseMenu/MainPauseMenu/VBoxContainer/BackToMainButton2" to="." method="_on_back_to_main_button_pressed"]
+
+[editable path="World/Player"]
+[editable path="PauseMenu"]
