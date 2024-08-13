@@ -19,37 +19,25 @@ func _ready():
 	
 
 func _process(delta):
-	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT):
+	
+	
+	if Input.is_mouse_button_pressed(MOUSE_BUTTON_LEFT) and !is_paused :
+		var collider=ray_cast.get_collider()
 		if grabbed_object==null:
 			#try to grab obj
-			var collider=ray_cast.get_collider()
-			if collider!=null: 
-				print("colider not null")
+			if collider:
+				print("colider not null,holding: ",collider.name," , distance: ",global_transform.origin.distance_to(collider.global_transform.origin))
 				if collider.is_in_group("grabbable"):
 					grabbed_object=collider
 					grab_distance=(grabbed_object.global_transform.origin-global_transform.origin).length()
 					var target_pos=global_transform.origin+global_transform.basis.z*-1*grab_distance
 					grabbed_object.global_transform.origin=target_pos
+					
 		if grabbed_object!=null:
 			grab_distance=(grabbed_object.global_transform.origin-global_transform.origin).length()
 			var target_pos=global_transform.origin+global_transform.basis.z*-1*grab_distance
 			grabbed_object.global_transform.origin=target_pos
-			'''
-			ray_cast.force_raycast_update()
-			if ray_cast.is_colliding():
-				print("COLLISION DETECED")
-				var collider=ray_cast.get_collider()
-				if collider.is_in_group("grabbable"):
-					grabbed_object=collider
-					print("IM GRABBING AN OBJECT")
-					#find and store distance to keep object in same disance
-					#will change this later to move obj closer/further using mouse scroll
-					grab_distance=(grabbed_object.global_transform.origin-global_transform.origin).length()
-				
-		if grabbed_object:
-			#move the object in front of camera
-			var target_pos=global_transform.origin+global_transform.basis.z*grab_distance
-			grabbed_object.global_transform.origin=target_pos'''
+	#body is no longer held (LMB unheld)
 	else:
 		if grabbed_object:
 			#release obj if button isnt pressed
@@ -78,6 +66,6 @@ func _input(event):
 		vertical_rotation = clamp(vertical_rotation, -90, 90)
 		rotation_degrees.x = vertical_rotation
 
-	
+
 func set_paused_state(paused: bool) -> void:
 	is_paused = paused

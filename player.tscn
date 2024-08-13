@@ -1,23 +1,8 @@
-[gd_scene load_steps=16 format=3 uid="uid://uoq5r2lvraly"]
+[gd_scene load_steps=12 format=3 uid="uid://uoq5r2lvraly"]
 
 [ext_resource type="Script" path="res://Camera.gd" id="1_mowmv"]
 [ext_resource type="Texture2D" uid="uid://b4ldce00l8c0i" path="res://icon.svg" id="2_rdcmx"]
 [ext_resource type="Texture2D" uid="uid://c0731ueo82ryt" path="res://crosshair.png" id="3_bfmlq"]
-
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_a7ooc"]
-sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
-ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
-
-[sub_resource type="Sky" id="Sky_gu2qy"]
-sky_material = SubResource("ProceduralSkyMaterial_a7ooc")
-
-[sub_resource type="Environment" id="Environment_74jn8"]
-background_mode = 2
-sky = SubResource("Sky_gu2qy")
-tonemap_mode = 2
-glow_enabled = true
-
-[sub_resource type="SphereShape3D" id="SphereShape3D_x5bcd"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_hhlla"]
 albedo_texture = ExtResource("2_rdcmx")
@@ -50,23 +35,12 @@ height = 0.75
 
 [node name="Player" type="CharacterBody3D"]
 
-[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
-environment = SubResource("Environment_74jn8")
-
-[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
-transform = Transform3D(-0.866023, -0.433016, 0.250001, 0, 0.499998, 0.866027, -0.500003, 0.749999, -0.43301, 0, 0, 0)
-shadow_enabled = true
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="."]
-transform = Transform3D(1, 0, 2.98023e-08, 0, 1, 0, -2.98023e-08, 0, 1, 0, 0, 0.880827)
-shape = SubResource("SphereShape3D_x5bcd")
-
 [node name="PlayerCamera" type="Camera3D" parent="."]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 9.12287, 0, 0, 0)
 script = ExtResource("1_mowmv")
 
 [node name="Head" type="MeshInstance3D" parent="PlayerCamera"]
-transform = Transform3D(3, 0, 1.78814e-07, 0, 3, 0, -1.78814e-07, 0, 3, 0, 0, 0.880827)
+transform = Transform3D(3, 0, 1.78814e-07, 0, 3, 0, -1.78814e-07, 0, 3, 0, 0, 1.70257)
 mesh = SubResource("SphereMesh_k15b5")
 skeleton = NodePath("../..")
 
@@ -87,8 +61,8 @@ mesh = SubResource("SphereMesh_qkyll")
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0246025, 7.45058e-09, -0.0671583)
 mesh = SubResource("SphereMesh_2yf5l")
 
-[node name="MeshInstance3D3" type="MeshInstance3D" parent="PlayerCamera/Head"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, -1, 0, 1, -4.37114e-08, 0, 0, -0.328137)
+[node name="NOSE" type="MeshInstance3D" parent="PlayerCamera/Head"]
+transform = Transform3D(1, 7.10543e-15, 0, 0, -4.37114e-08, -1, -7.10543e-15, 1, -4.37114e-08, -9.29062e-09, 0, -0.172266)
 layers = 7
 mesh = SubResource("CapsuleMesh_dr8x8")
 
