@@ -12,6 +12,10 @@ var grab_distance:float=0.0
 # Track the vertical rotation
 var vertical_rotation: float = 0.0
 
+#min/max distance 
+var min_distance : float=8.0
+var max_distance: float = 50.0
+
 func _ready():
 	# Hide the mouse cursor and capture it
 	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
@@ -34,7 +38,7 @@ func _process(delta):
 					grabbed_object.global_transform.origin=target_pos
 					
 		if grabbed_object!=null:
-			grab_distance=(grabbed_object.global_transform.origin-global_transform.origin).length()
+			#grab_distance=(grabbed_object.global_transform.origin-global_transform.origin).length()
 			var target_pos=global_transform.origin+global_transform.basis.z*-1*grab_distance
 			grabbed_object.global_transform.origin=target_pos
 	#body is no longer held (LMB unheld)
@@ -66,6 +70,15 @@ func _input(event):
 		vertical_rotation = clamp(vertical_rotation, -90, 90)
 		rotation_degrees.x = vertical_rotation
 
+	if grabbed_object and event is InputEventMouseButton:
+		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
+			print("mouse wheel up detected")
+			grab_distance+=1.0
+		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
+			print("mouse wheel down detected")
+			grab_distance-=1.0
+		#clamp stuff
+		grab_distance=clamp(grab_distance,min_distance,max_distance)
 
 func set_paused_state(paused: bool) -> void:
 	is_paused = paused
