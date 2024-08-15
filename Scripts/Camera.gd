@@ -51,6 +51,16 @@ func _process(delta):
 			#grab_distance=(grabbed_object.global_transform.origin-global_transform.origin).length()
 			var target_pos=global_transform.origin+global_transform.basis.z*-1*grab_distance
 			grabbed_object.global_transform.origin=target_pos
+			#apply graduale color change using lerp and delta
+			time_passed += delta * 10.0 # Use delta directly to affect the speed 
+			#based on frame rate, multiply delta to make sin wave change in faster pace
+			#chatgpt is stupid as a rock and this took me 2 hours
+			var lerp_value = 0.5* (sin(time_passed) + 1.0)  # Result ranges from 0 to 1
+			aura=grabbed_object.get_node("aura")
+			if aura:
+				aura.mesh.material.albedo_color = white_color.lerp(yellow_color,lerp_value)
+				
+			
 	#body is no longer held (LMB unheld)
 	else:
 		if grabbed_object:

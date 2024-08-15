@@ -52,8 +52,8 @@ cull_mode = 1
 
 [sub_resource type="SphereMesh" id="SphereMesh_pu2xm"]
 material = SubResource("StandardMaterial3D_ol7sq")
-radius = 4.25
-height = 8.5
+radius = 4.5
+height = 9.0
 radial_segments = 32
 rings = 64
 
