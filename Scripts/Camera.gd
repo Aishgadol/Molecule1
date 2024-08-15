@@ -8,6 +8,7 @@ var root :Node3D=null
 var grabbed_object =null
 var ray_cast:RayCast3D
 var grab_distance:float=0.0
+var aura=null
 
 # Track the vertical rotation
 var vertical_rotation: float = 0.0
@@ -15,6 +16,12 @@ var vertical_rotation: float = 0.0
 #min/max distance 
 var min_distance : float=8.0
 var max_distance: float = 50.0
+
+
+#colors
+var white_color : Color = Color(1,1,1) #white
+var yellow_color: Color = Color(1,1,0) #yellow
+var time_passed :float =0.0  #auxiliry var to help with graduale aura color changing
 
 func _ready():
 	# Hide the mouse cursor and capture it
@@ -35,7 +42,10 @@ func _process(delta):
 					grab_distance=(grabbed_object.global_transform.origin-global_transform.origin).length()
 					var target_pos=global_transform.origin+global_transform.basis.z*-1*grab_distance
 					grabbed_object.global_transform.origin=target_pos
-					print("you are now holding: ",grabbed_object.name)
+					aura = grabbed_object.get_node("aura")
+					if aura:
+						aura.visible=true
+					
 					
 		if grabbed_object!=null:
 			#grab_distance=(grabbed_object.global_transform.origin-global_transform.origin).length()
@@ -48,6 +58,9 @@ func _process(delta):
 			#world script needs to handle the intersection logic
 			root.check_for_merge(grabbed_object)
 			#release obj if button isnt pressed
+			#aura = grabbed_object.get_node("aura")
+			if aura:
+				aura.visible=false
 			grabbed_object=null
 			
 func _on_Area3D_body_entered(body):

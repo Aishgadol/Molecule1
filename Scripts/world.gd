@@ -61,6 +61,7 @@ func check_for_merge(released_object):
 				#create ew atom (sphere for now, maybe molecule later) at the midpoint of intersections
 				level.add_child(new_object)
 				new_object.global_transform.origin=midpoint
+				new_object.get_node("aura").visible=false
 
 				#clean up explosion instance
 				explosion_instance.queue_free()

@@ -274,10 +274,6 @@ tracks/2/keys = {
 "values": [Vector2(0, 0), Vector2(-375, 0)]
 }
 
-[sub_resource type="Animation" id="Animation_1pw3w"]
-resource_name = "slide_out"
-length = 1.5
-
 [sub_resource type="Animation" id="Animation_plhud"]
 resource_name = "fade_to_black"
 length = 1.25
@@ -317,6 +313,10 @@ tracks/2/keys = {
 "update": 0,
 "values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0.2), Color(1, 1, 1, 0)]
 }
+
+[sub_resource type="Animation" id="Animation_1pw3w"]
+resource_name = "slide_out"
+length = 1.5
 
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_dvhxk"]
 _data = {
