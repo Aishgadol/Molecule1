@@ -1,10 +1,10 @@
 [gd_scene load_steps=29 format=3 uid="uid://cs24c6bcipuux"]
 
-[ext_resource type="Texture2D" uid="uid://d3qoet7kbkvxj" path="res://woodfloor.jpg" id="1_o1cb3"]
-[ext_resource type="Script" path="res://world.gd" id="1_sier2"]
-[ext_resource type="PackedScene" uid="uid://uoq5r2lvraly" path="res://player.tscn" id="2_1d3v8"]
-[ext_resource type="Texture2D" uid="uid://bfec6aaoecgyu" path="res://nightsky.jpg" id="2_nj2dh"]
-[ext_resource type="PackedScene" uid="uid://p42ftxav826i" path="res://pause_menu.tscn" id="5_4j80j"]
+[ext_resource type="Texture2D" uid="uid://d3qoet7kbkvxj" path="res://Textures/woodfloor.jpg" id="1_o1cb3"]
+[ext_resource type="Script" path="res://Scripts/world.gd" id="1_sier2"]
+[ext_resource type="PackedScene" uid="uid://uoq5r2lvraly" path="res://Scenes/player.tscn" id="2_1d3v8"]
+[ext_resource type="Texture2D" uid="uid://bfec6aaoecgyu" path="res://Textures/nightsky.jpg" id="2_nj2dh"]
+[ext_resource type="PackedScene" uid="uid://p42ftxav826i" path="res://Scenes/pause_menu.tscn" id="5_4j80j"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_cun67"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -31,7 +31,7 @@ albedo_texture = ExtResource("2_nj2dh")
 [sub_resource type="SphereMesh" id="SphereMesh_31n0u"]
 material = SubResource("StandardMaterial3D_bgxsp")
 radius = 100.0
-height = 100.0
+height = 125.0
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_8n1gc"]
 radius = 4.0
@@ -198,7 +198,7 @@ light_specular = 0.0
 spot_range = 200.0
 spot_angle = 61.5
 
-[node name="blueball" type="RigidBody3D" parent="World/Level" groups=["grabbable"]]
+[node name="blueball" type="RigidBody3D" parent="World/Level" groups=["grabbable", "mergeable"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.8706, 13, -9.35161)
 gravity_scale = 0.0
 
@@ -208,7 +208,7 @@ shape = SubResource("SphereShape3D_8n1gc")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="World/Level/blueball"]
 mesh = SubResource("SphereMesh_evs0k")
 
-[node name="greenball" type="RigidBody3D" parent="World/Level" groups=["grabbable"]]
+[node name="greenball" type="RigidBody3D" parent="World/Level" groups=["grabbable", "mergeable"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.26846, 25.6803, -33.0818)
 gravity_scale = 0.0
 
@@ -218,7 +218,7 @@ shape = SubResource("SphereShape3D_8n1gc")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="World/Level/greenball"]
 mesh = SubResource("SphereMesh_8j85c")
 
-[node name="whiteball" type="RigidBody3D" parent="World/Level" groups=["grabbable"]]
+[node name="whiteball" type="RigidBody3D" parent="World/Level" groups=["grabbable", "mergeable"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.1051, 13.0547, 18.5985)
 gravity_scale = 0.0
 
@@ -228,7 +228,7 @@ shape = SubResource("SphereShape3D_8n1gc")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="World/Level/whiteball"]
 mesh = SubResource("SphereMesh_ijd4f")
 
-[node name="yellowball" type="RigidBody3D" parent="World/Level" groups=["grabbable"]]
+[node name="yellowball" type="RigidBody3D" parent="World/Level" groups=["grabbable", "mergeable"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.1051, 4.05473, 34.5984)
 gravity_scale = 0.0
 
@@ -238,7 +238,7 @@ shape = SubResource("SphereShape3D_8n1gc")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="World/Level/yellowball"]
 mesh = SubResource("SphereMesh_ny6lm")
 
-[node name="redball" type="RigidBody3D" parent="World/Level" groups=["grabbable"]]
+[node name="redball" type="RigidBody3D" parent="World/Level" groups=["grabbable", "mergeable"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.6693, 23.0108, -33.7789)
 gravity_scale = 0.0
 
@@ -248,7 +248,7 @@ shape = SubResource("SphereShape3D_8n1gc")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="World/Level/redball"]
 mesh = SubResource("SphereMesh_kwlrb")
 
-[node name="grayball" type="RigidBody3D" parent="World/Level" groups=["grabbable"]]
+[node name="grayball" type="RigidBody3D" parent="World/Level" groups=["grabbable", "mergeable"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -32.3307, 25.5093, 3.22114)
 gravity_scale = 0.0
 
@@ -258,7 +258,7 @@ shape = SubResource("SphereShape3D_8n1gc")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="World/Level/grayball"]
 mesh = SubResource("SphereMesh_sv018")
 
-[node name="pinkball" type="RigidBody3D" parent="World/Level" groups=["grabbable"]]
+[node name="pinkball" type="RigidBody3D" parent="World/Level" groups=["grabbable", "mergeable"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.3307, 5.0108, -29.7789)
 gravity_scale = 0.0
 
@@ -268,7 +268,7 @@ shape = SubResource("SphereShape3D_8n1gc")
 [node name="MeshInstance3D" type="MeshInstance3D" parent="World/Level/pinkball"]
 mesh = SubResource("SphereMesh_7m86i")
 
-[node name="orangeball" type="RigidBody3D" parent="World/Level" groups=["grabbable"]]
+[node name="orangeball" type="RigidBody3D" parent="World/Level" groups=["grabbable", "mergeable"]]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.3307, 5.0108, 14.2211)
 gravity_scale = 0.0
 

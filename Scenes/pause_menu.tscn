@@ -1,7 +1,8 @@
 [gd_scene load_steps=28 format=3 uid="uid://p42ftxav826i"]
 
-[ext_resource type="Script" path="res://pause_menu.gd" id="1_jwo5m"]
-[ext_resource type="Script" path="res://options_label.gd" id="1_w68ec"]
+[ext_resource type="Script" path="res://Scripts/pause_menu.gd" id="1_jwo5m"]
+[ext_resource type="Script" path="res://Scripts/options_label.gd" id="1_w68ec"]
+[ext_resource type="Animation" uid="uid://dubl7bhagft8i" path="res://fade_to_black_animation.res" id="3_4xbgd"]
 
 [sub_resource type="StyleBoxEmpty" id="StyleBoxEmpty_8g2bq"]
 
@@ -94,50 +95,10 @@ tracks/2/keys = {
 "values": [Color(1, 1, 1, 1)]
 }
 
-[sub_resource type="Animation" id="Animation_ttytu"]
-resource_name = "fade_to_black"
-length = 2.5
-tracks/0/type = "value"
-tracks/0/imported = false
-tracks/0/enabled = true
-tracks/0/path = NodePath("ColorRect:color")
-tracks/0/interp = 1
-tracks/0/loop_wrap = true
-tracks/0/keys = {
-"times": PackedFloat32Array(0, 2),
-"transitions": PackedFloat32Array(1, 1),
-"update": 0,
-"values": [Color(0, 0, 0, 0), Color(0, 0, 0, 1)]
-}
-tracks/1/type = "value"
-tracks/1/imported = false
-tracks/1/enabled = true
-tracks/1/path = NodePath("ColorRect/MoleculeLabel:theme_override_colors/font_color")
-tracks/1/interp = 1
-tracks/1/loop_wrap = true
-tracks/1/keys = {
-"times": PackedFloat32Array(0, 1, 2),
-"transitions": PackedFloat32Array(1, 1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0.196078), Color(1, 1, 0, 1)]
-}
-tracks/2/type = "value"
-tracks/2/imported = false
-tracks/2/enabled = true
-tracks/2/path = NodePath("MainPauseMenu/VBoxContainer:modulate")
-tracks/2/interp = 1
-tracks/2/loop_wrap = true
-tracks/2/keys = {
-"times": PackedFloat32Array(0, 0.4, 1.5),
-"transitions": PackedFloat32Array(1, 0.1, 1),
-"update": 0,
-"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0.196078), Color(1, 1, 1, 0)]
-}
-
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_pae46"]
 _data = {
 "RESET": SubResource("Animation_yuq8i"),
-"fade_to_black": SubResource("Animation_ttytu")
+"fade_to_black": ExtResource("3_4xbgd")
 }
 
 [node name="PauseMenu" type="Control"]

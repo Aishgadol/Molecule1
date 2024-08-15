@@ -46,4 +46,4 @@ func _on_back_to_main_button_pressed() -> void:
 			
 	anim_player.play("fade_to_black")
 	await anim_player.animation_finished
-	get_tree().change_scene_to_file("res://start_menu.tscn")
+	get_tree().change_scene_to_file("res://Scenes/start_menu.tscn")

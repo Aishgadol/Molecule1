@@ -4,7 +4,7 @@ extends Camera3D
 var mouse_sensitivity: float = 0.1
 var move_speed: float = 15.0
 var is_paused:bool=false
-
+var root :Node3D=null
 var grabbed_object =null
 var ray_cast:RayCast3D
 var grab_distance:float=0.0
@@ -30,12 +30,12 @@ func _process(delta):
 		if grabbed_object==null:
 			#try to grab obj
 			if collider:
-				print("colider not null,holding: ",collider.name," , distance: ",global_transform.origin.distance_to(collider.global_transform.origin))
 				if collider.is_in_group("grabbable"):
 					grabbed_object=collider
 					grab_distance=(grabbed_object.global_transform.origin-global_transform.origin).length()
 					var target_pos=global_transform.origin+global_transform.basis.z*-1*grab_distance
 					grabbed_object.global_transform.origin=target_pos
+					print("you are now holding: ",grabbed_object.name)
 					
 		if grabbed_object!=null:
 			#grab_distance=(grabbed_object.global_transform.origin-global_transform.origin).length()
@@ -44,6 +44,9 @@ func _process(delta):
 	#body is no longer held (LMB unheld)
 	else:
 		if grabbed_object:
+			#check if object is intersecting with other objects in space
+			#world script needs to handle the intersection logic
+			root.check_for_merge(grabbed_object)
 			#release obj if button isnt pressed
 			grabbed_object=null
 			
@@ -72,13 +75,18 @@ func _input(event):
 
 	if grabbed_object and event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
-			print("mouse wheel up detected")
 			grab_distance+=1.0
 		elif event.button_index == MOUSE_BUTTON_WHEEL_DOWN:
-			print("mouse wheel down detected")
 			grab_distance-=1.0
 		#clamp stuff
 		grab_distance=clamp(grab_distance,min_distance,max_distance)
 
 func set_paused_state(paused: bool) -> void:
 	is_paused = paused
+
+func get_grabbed_object():
+	return grabbed_object
+
+func set_root(root):
+	self.root=root
+	return

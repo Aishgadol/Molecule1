@@ -1,26 +1,26 @@
-[gd_scene load_steps=51 format=3 uid="uid://bx4ga4lo23ehg"]
+[gd_scene load_steps=52 format=3 uid="uid://bx4ga4lo23ehg"]
 
-[ext_resource type="Texture2D" uid="uid://d3qoet7kbkvxj" path="res://woodfloor.jpg" id="1_wf4d0"]
-[ext_resource type="Texture2D" uid="uid://bfec6aaoecgyu" path="res://nightsky.jpg" id="2_so1b4"]
-[ext_resource type="Texture2D" uid="uid://b4ldce00l8c0i" path="res://icon.svg" id="3_e0neh"]
-[ext_resource type="Script" path="res://menu_camera.gd" id="3_e6jdt"]
-[ext_resource type="Script" path="res://MainMenuScript.gd" id="4_8kj3p"]
-[ext_resource type="AudioStream" uid="uid://crpv8b05gnu3i" path="res://my_guy_vivaldi_classical.mp3" id="5_hbn78"]
-[ext_resource type="Script" path="res://options_label.gd" id="5_hxxgf"]
+[ext_resource type="Texture2D" uid="uid://d3qoet7kbkvxj" path="res://Textures/woodfloor.jpg" id="1_tb35t"]
+[ext_resource type="Texture2D" uid="uid://bfec6aaoecgyu" path="res://Textures/nightsky.jpg" id="2_3hp3v"]
+[ext_resource type="Texture2D" uid="uid://b4ldce00l8c0i" path="res://Textures/icon.svg" id="3_efe67"]
+[ext_resource type="Script" path="res://Scripts/MainMenuScript.gd" id="4_m4h4r"]
+[ext_resource type="Script" path="res://Scripts/menu_camera.gd" id="5_lsehn"]
+[ext_resource type="Script" path="res://Scripts/options_label.gd" id="6_0piwa"]
+[ext_resource type="AudioStream" uid="uid://crpv8b05gnu3i" path="res://my_guy_vivaldi_classical.mp3" id="7_qh2kd"]
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_x7gdb"]
 albedo_color = Color(1, 1, 0.870588, 1)
-albedo_texture = ExtResource("1_wf4d0")
+albedo_texture = ExtResource("1_tb35t")
 metallic_specular = 0.84
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wkuid"]
 cull_mode = 1
-albedo_texture = ExtResource("2_so1b4")
+albedo_texture = ExtResource("2_3hp3v")
 
 [sub_resource type="SphereMesh" id="SphereMesh_vo0om"]
 material = SubResource("StandardMaterial3D_wkuid")
 radius = 100.0
-height = 100.0
+height = 125.0
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_24146"]
 radius = 4.0
@@ -105,7 +105,7 @@ radial_segments = 32
 rings = 64
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_3afd6"]
-albedo_texture = ExtResource("3_e0neh")
+albedo_texture = ExtResource("3_efe67")
 
 [sub_resource type="SphereMesh" id="SphereMesh_5plun"]
 material = SubResource("StandardMaterial3D_3afd6")
@@ -197,6 +197,42 @@ tracks/2/keys = {
 "update": 0,
 "values": [Vector3(-0.20944, -0.785398, 0)]
 }
+tracks/3/type = "value"
+tracks/3/imported = false
+tracks/3/enabled = true
+tracks/3/path = NodePath("ColorRect:color")
+tracks/3/interp = 1
+tracks/3/loop_wrap = true
+tracks/3/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(0, 0, 0, 0)]
+}
+tracks/4/type = "value"
+tracks/4/imported = false
+tracks/4/enabled = true
+tracks/4/path = NodePath("ColorRect/MoleculeLabel:theme_override_colors/font_color")
+tracks/4/interp = 1
+tracks/4/loop_wrap = true
+tracks/4/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 0)]
+}
+tracks/5/type = "value"
+tracks/5/imported = false
+tracks/5/enabled = true
+tracks/5/path = NodePath("MainMenu:modulate")
+tracks/5/interp = 1
+tracks/5/loop_wrap = true
+tracks/5/keys = {
+"times": PackedFloat32Array(0),
+"transitions": PackedFloat32Array(1),
+"update": 0,
+"values": [Color(1, 1, 1, 1)]
+}
 
 [sub_resource type="Animation" id="Animation_e7glk"]
 resource_name = "camera_trans"
@@ -242,10 +278,51 @@ tracks/2/keys = {
 resource_name = "slide_out"
 length = 1.5
 
+[sub_resource type="Animation" id="Animation_plhud"]
+resource_name = "fade_to_black"
+length = 1.25
+tracks/0/type = "value"
+tracks/0/imported = false
+tracks/0/enabled = true
+tracks/0/path = NodePath("ColorRect:color")
+tracks/0/interp = 1
+tracks/0/loop_wrap = true
+tracks/0/keys = {
+"times": PackedFloat32Array(0, 1.23333),
+"transitions": PackedFloat32Array(1, 1),
+"update": 0,
+"values": [Color(0, 0, 0, 0), Color(0, 0, 0, 1)]
+}
+tracks/1/type = "value"
+tracks/1/imported = false
+tracks/1/enabled = true
+tracks/1/path = NodePath("ColorRect/MoleculeLabel:theme_override_colors/font_color")
+tracks/1/interp = 1
+tracks/1/loop_wrap = true
+tracks/1/keys = {
+"times": PackedFloat32Array(0, 0.566667, 1.23333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 0), Color(1, 1, 1, 0.2), Color(1, 1, 0, 1)]
+}
+tracks/2/type = "value"
+tracks/2/imported = false
+tracks/2/enabled = true
+tracks/2/path = NodePath("MainMenu:modulate")
+tracks/2/interp = 1
+tracks/2/loop_wrap = true
+tracks/2/keys = {
+"times": PackedFloat32Array(0, 0.5, 1.23333),
+"transitions": PackedFloat32Array(1, 1, 1),
+"update": 0,
+"values": [Color(1, 1, 1, 1), Color(1, 1, 1, 0.2), Color(1, 1, 1, 0)]
+}
+
 [sub_resource type="AnimationLibrary" id="AnimationLibrary_dvhxk"]
 _data = {
 "RESET": SubResource("Animation_6fc4c"),
 "camera_trans": SubResource("Animation_e7glk"),
+"fade_to_black": SubResource("Animation_plhud"),
 "slide_out": SubResource("Animation_1pw3w")
 }
 
@@ -441,7 +518,7 @@ grow_horizontal = 2
 grow_vertical = 2
 size_flags_horizontal = 4
 size_flags_vertical = 4
-script = ExtResource("4_8kj3p")
+script = ExtResource("4_m4h4r")
 
 [node name="SubViewportContainer" type="SubViewportContainer" parent="MainMenuContainer"]
 layout_mode = 1
@@ -459,7 +536,7 @@ render_target_update_mode = 4
 [node name="MenuCamera" type="Camera3D" parent="MainMenuContainer/SubViewportContainer/SubViewport"]
 transform = Transform3D(0.707107, 0.147016, -0.691655, 0, 0.978148, 0.207912, 0.707107, -0.147016, 0.691655, -52.6662, 12.2215, 52.9347)
 near = 0.001
-script = ExtResource("3_e6jdt")
+script = ExtResource("5_lsehn")
 
 [node name="MainMenu" type="MarginContainer" parent="MainMenuContainer"]
 layout_mode = 1
@@ -624,7 +701,7 @@ theme_type_variation = &"HeaderLarge"
 theme_override_font_sizes/font_size = 50
 text = "Options
 "
-script = ExtResource("5_hxxgf")
+script = ExtResource("6_0piwa")
 
 [node name="MarginContainer2" type="MarginContainer" parent="MainMenuContainer/OptionMenu/VBoxContainer"]
 layout_mode = 2
@@ -690,8 +767,41 @@ libraries = {
 }
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="MainMenuContainer"]
-stream = ExtResource("5_hbn78")
+stream = ExtResource("7_qh2kd")
 autoplay = true
+
+[node name="ColorRect" type="ColorRect" parent="MainMenuContainer"]
+visible = false
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0)
+
+[node name="MoleculeLabel" type="Label" parent="MainMenuContainer/ColorRect"]
+custom_minimum_size = Vector2(0, -50)
+layout_mode = 1
+anchors_preset = 8
+anchor_left = 0.5
+anchor_top = 0.5
+anchor_right = 0.5
+anchor_bottom = 0.5
+offset_left = -153.5
+offset_top = -43.0
+offset_right = 153.5
+offset_bottom = 43.0
+grow_horizontal = 2
+grow_vertical = 2
+size_flags_horizontal = 0
+theme_type_variation = &"HeaderLarge"
+theme_override_colors/font_color = Color(1, 1, 1, 0)
+theme_override_font_sizes/font_size = 62
+text = "Molecule1
+"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [connection signal="pressed" from="MainMenuContainer/MainMenu/VBoxContainer/StartButton" to="MainMenuContainer" method="_on_start_button_pressed"]
 [connection signal="pressed" from="MainMenuContainer/MainMenu/VBoxContainer/Options Button" to="MainMenuContainer" method="_on_options_button_pressed"]

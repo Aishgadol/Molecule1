@@ -2,8 +2,8 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://bfec6aaoecgyu"
-path.s3tc="res://.godot/imported/nightsky.jpg-024433c787f344b3263bd52c1a84822e.s3tc.ctex"
+uid="uid://d3qoet7kbkvxj"
+path.s3tc="res://.godot/imported/woodfloor.jpg-91cc190093df2726d79319cf6ca471e0.s3tc.ctex"
 metadata={
 "imported_formats": ["s3tc_bptc"],
 "vram_texture": true
@@ -11,8 +11,8 @@ metadata={
 
 [deps]
 
-source_file="res://nightsky.jpg"
-dest_files=["res://.godot/imported/nightsky.jpg-024433c787f344b3263bd52c1a84822e.s3tc.ctex"]
+source_file="res://Textures/woodfloor.jpg"
+dest_files=["res://.godot/imported/woodfloor.jpg-91cc190093df2726d79319cf6ca471e0.s3tc.ctex"]
 
 [params]
 

@@ -5,6 +5,8 @@ extends Control
 @onready var audio_player=$AudioStreamPlayer
 @onready var music_on_off_button=$OptionMenu/VBoxContainer/HBoxContainer/MusicOnOffButton
 @onready var vBox=$MainMenu/VBoxContainer
+@onready var colorRect=$ColorRect
+
 var musicOn=true;
 var way = 1
 # Called when the node enters the scene tree for the first time.
@@ -36,12 +38,20 @@ func _on_start_button_pressed() -> void:
 	await anim_player.animation_finished
 	#audio_player.stop()
 	menu_camera.stop_camera_movement()
-	get_tree().change_scene_to_file("res://world.tscn")
+	get_tree().change_scene_to_file("res://Scenes/world.tscn")
 	
 	#print("done playing")
 
 
 func _on_quit_button_pressed() -> void:
+	colorRect.visible=true
+	for child in vBox.get_children():
+		if child is Button:
+			child.disabled=true
+	#vBox.disabled=true
+			
+	anim_player.play("fade_to_black")
+	await anim_player.animation_finished
 	get_tree().quit()
 
 func _on_options_button_pressed() -> void:

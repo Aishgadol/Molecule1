@@ -11,9 +11,9 @@ config_version=5
 [application]
 
 config/name="Molecule1"
-run/main_scene="res://start_menu.tscn"
+run/main_scene="res://Scenes/start_menu.tscn"
 config/features=PackedStringArray("4.3", "Mobile")
-config/icon="res://icon.svg"
+config/icon="res://Textures/icon.svg"
 
 [display]
 
@@ -24,6 +24,7 @@ window/size/resizable=false
 [global_group]
 
 grabbable="objects u can grab"
+mergeable="all objects that are mergeable in the world"
 
 [input]
 
