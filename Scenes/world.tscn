@@ -1,10 +1,11 @@
-[gd_scene load_steps=31 format=3 uid="uid://cs24c6bcipuux"]
+[gd_scene load_steps=29 format=3 uid="uid://cs24c6bcipuux"]
 
 [ext_resource type="Texture2D" uid="uid://d3qoet7kbkvxj" path="res://Textures/woodfloor.jpg" id="1_o1cb3"]
 [ext_resource type="Script" path="res://Scripts/world.gd" id="1_sier2"]
 [ext_resource type="PackedScene" uid="uid://uoq5r2lvraly" path="res://Scenes/player.tscn" id="2_1d3v8"]
 [ext_resource type="Texture2D" uid="uid://bfec6aaoecgyu" path="res://Textures/nightsky.jpg" id="2_nj2dh"]
 [ext_resource type="PackedScene" uid="uid://p42ftxav826i" path="res://Scenes/pause_menu.tscn" id="5_4j80j"]
+[ext_resource type="PackedScene" uid="uid://id1b0i4dbwx3" path="res://Scenes/atom.tscn" id="5_x7o8f"]
 
 [sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_cun67"]
 sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
@@ -33,94 +34,80 @@ material = SubResource("StandardMaterial3D_bgxsp")
 radius = 100.0
 height = 125.0
 
-[sub_resource type="SphereShape3D" id="SphereShape3D_8n1gc"]
-radius = 4.0
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dlx3w"]
+albedo_color = Color(0.107796, 0.344801, 1, 1)
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_vqho6"]
-albedo_color = Color(1.05888e-06, 0.408754, 0.64967, 1)
-
-[sub_resource type="SphereMesh" id="SphereMesh_evs0k"]
-material = SubResource("StandardMaterial3D_vqho6")
+[sub_resource type="SphereMesh" id="SphereMesh_ngoe2"]
+material = SubResource("StandardMaterial3D_dlx3w")
 radius = 4.0
 height = 8.0
 radial_segments = 32
 rings = 64
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_ol7sq"]
-transparency = 1
-cull_mode = 1
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4y4c6"]
+albedo_color = Color(0, 1, 0, 1)
 
-[sub_resource type="SphereMesh" id="SphereMesh_pu2xm"]
-material = SubResource("StandardMaterial3D_ol7sq")
-radius = 4.5
-height = 9.0
-radial_segments = 32
-rings = 64
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_o5lw2"]
-albedo_color = Color(0, 0.681845, 0, 1)
-
-[sub_resource type="SphereMesh" id="SphereMesh_8j85c"]
-material = SubResource("StandardMaterial3D_o5lw2")
+[sub_resource type="SphereMesh" id="SphereMesh_8yvc6"]
+material = SubResource("StandardMaterial3D_4y4c6")
 radius = 4.0
 height = 8.0
 radial_segments = 32
 rings = 64
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_fyouj"]
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_tdtj1"]
 
-[sub_resource type="SphereMesh" id="SphereMesh_ijd4f"]
-material = SubResource("StandardMaterial3D_fyouj")
+[sub_resource type="SphereMesh" id="SphereMesh_1lw8a"]
+material = SubResource("StandardMaterial3D_tdtj1")
 radius = 4.0
 height = 8.0
 radial_segments = 32
 rings = 64
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_oaqrc"]
-albedo_color = Color(0.896529, 0.713264, 0, 1)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_mdo67"]
+albedo_color = Color(1, 1, 0, 1)
 
-[sub_resource type="SphereMesh" id="SphereMesh_ny6lm"]
-material = SubResource("StandardMaterial3D_oaqrc")
+[sub_resource type="SphereMesh" id="SphereMesh_6xxro"]
+material = SubResource("StandardMaterial3D_mdo67")
 radius = 4.0
 height = 8.0
 radial_segments = 32
 rings = 64
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_xddph"]
-albedo_color = Color(0.615686, 0, 0, 1)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_8q45j"]
+albedo_color = Color(1, 0, 0, 1)
 
-[sub_resource type="SphereMesh" id="SphereMesh_kwlrb"]
-material = SubResource("StandardMaterial3D_xddph")
+[sub_resource type="SphereMesh" id="SphereMesh_gdamo"]
+material = SubResource("StandardMaterial3D_8q45j")
 radius = 4.0
 height = 8.0
 radial_segments = 32
 rings = 64
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_i28a3"]
-albedo_color = Color(0.355313, 0.355314, 0.355314, 1)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_a6ao2"]
+albedo_color = Color(0.509286, 0.509286, 0.509286, 1)
 
-[sub_resource type="SphereMesh" id="SphereMesh_sv018"]
-material = SubResource("StandardMaterial3D_i28a3")
+[sub_resource type="SphereMesh" id="SphereMesh_12nxo"]
+material = SubResource("StandardMaterial3D_a6ao2")
 radius = 4.0
 height = 8.0
 radial_segments = 32
 rings = 64
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_2ccwq"]
-albedo_color = Color(0.939853, 0.10519, 1, 1)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_4lv0b"]
+albedo_color = Color(1, 0, 0.615686, 1)
 
-[sub_resource type="SphereMesh" id="SphereMesh_7m86i"]
-material = SubResource("StandardMaterial3D_2ccwq")
+[sub_resource type="SphereMesh" id="SphereMesh_kcaiv"]
+material = SubResource("StandardMaterial3D_4lv0b")
 radius = 4.0
 height = 8.0
 radial_segments = 32
 rings = 64
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_odw4a"]
-albedo_color = Color(0.852827, 0.39218, 0, 1)
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_sar3o"]
+albedo_color = Color(1, 0.647059, 0, 1)
 
-[sub_resource type="SphereMesh" id="SphereMesh_ifb4w"]
-material = SubResource("StandardMaterial3D_odw4a")
+[sub_resource type="SphereMesh" id="SphereMesh_g0hb2"]
+material = SubResource("StandardMaterial3D_sar3o")
 radius = 4.0
 height = 8.0
 radial_segments = 32
@@ -209,117 +196,53 @@ light_specular = 0.0
 spot_range = 200.0
 spot_angle = 61.5
 
-[node name="blueball" type="RigidBody3D" parent="World/Level" groups=["grabbable", "mergeable"]]
+[node name="blue_atom" parent="World/Level" instance=ExtResource("5_x7o8f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 15.8706, 13, -9.35161)
-gravity_scale = 0.0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Level/blueball"]
-shape = SubResource("SphereShape3D_8n1gc")
+[node name="MeshInstance3D2" parent="World/Level/blue_atom" index="1"]
+mesh = SubResource("SphereMesh_ngoe2")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="World/Level/blueball"]
-mesh = SubResource("SphereMesh_evs0k")
-
-[node name="aura" type="MeshInstance3D" parent="World/Level/blueball"]
-visible = false
-mesh = SubResource("SphereMesh_pu2xm")
-
-[node name="greenball" type="RigidBody3D" parent="World/Level" groups=["grabbable", "mergeable"]]
+[node name="green_atom2" parent="World/Level" instance=ExtResource("5_x7o8f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -2.26846, 25.6803, -33.0818)
-gravity_scale = 0.0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Level/greenball"]
-shape = SubResource("SphereShape3D_8n1gc")
+[node name="MeshInstance3D2" parent="World/Level/green_atom2" index="1"]
+mesh = SubResource("SphereMesh_8yvc6")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="World/Level/greenball"]
-mesh = SubResource("SphereMesh_8j85c")
+[node name="white_atom" parent="World/Level" instance=ExtResource("5_x7o8f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.105, 13.055, 18.598)
 
-[node name="aura" type="MeshInstance3D" parent="World/Level/greenball"]
-visible = false
-mesh = SubResource("SphereMesh_pu2xm")
+[node name="MeshInstance3D2" parent="World/Level/white_atom" index="1"]
+mesh = SubResource("SphereMesh_1lw8a")
 
-[node name="whiteball" type="RigidBody3D" parent="World/Level" groups=["grabbable", "mergeable"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.1051, 13.0547, 18.5985)
-gravity_scale = 0.0
+[node name="yellow_atom" parent="World/Level" instance=ExtResource("5_x7o8f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.105, 4.379, 34.598)
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Level/whiteball"]
-shape = SubResource("SphereShape3D_8n1gc")
+[node name="MeshInstance3D2" parent="World/Level/yellow_atom" index="1"]
+mesh = SubResource("SphereMesh_6xxro")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="World/Level/whiteball"]
-mesh = SubResource("SphereMesh_ijd4f")
+[node name="red_atom" parent="World/Level" instance=ExtResource("5_x7o8f")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.669, 23.011, -33.779)
 
-[node name="aura" type="MeshInstance3D" parent="World/Level/whiteball"]
-visible = false
-mesh = SubResource("SphereMesh_pu2xm")
+[node name="MeshInstance3D2" parent="World/Level/red_atom" index="1"]
+mesh = SubResource("SphereMesh_gdamo")
 
-[node name="yellowball" type="RigidBody3D" parent="World/Level" groups=["grabbable", "mergeable"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 23.1051, 4.37934, 34.5984)
-gravity_scale = 0.0
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Level/yellowball"]
-shape = SubResource("SphereShape3D_8n1gc")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="World/Level/yellowball"]
-mesh = SubResource("SphereMesh_ny6lm")
-
-[node name="aura" type="MeshInstance3D" parent="World/Level/yellowball"]
-visible = false
-mesh = SubResource("SphereMesh_pu2xm")
-
-[node name="redball" type="RigidBody3D" parent="World/Level" groups=["grabbable", "mergeable"]]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 32.6693, 23.0108, -33.7789)
-gravity_scale = 0.0
-
-[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Level/redball"]
-shape = SubResource("SphereShape3D_8n1gc")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="World/Level/redball"]
-mesh = SubResource("SphereMesh_kwlrb")
-
-[node name="aura" type="MeshInstance3D" parent="World/Level/redball"]
-visible = false
-mesh = SubResource("SphereMesh_pu2xm")
-
-[node name="grayball" type="RigidBody3D" parent="World/Level" groups=["grabbable", "mergeable"]]
+[node name="green_atom" parent="World/Level" instance=ExtResource("5_x7o8f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -32.3307, 25.5093, 3.22114)
-gravity_scale = 0.0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Level/grayball"]
-shape = SubResource("SphereShape3D_8n1gc")
+[node name="MeshInstance3D2" parent="World/Level/green_atom" index="1"]
+mesh = SubResource("SphereMesh_12nxo")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="World/Level/grayball"]
-mesh = SubResource("SphereMesh_sv018")
-
-[node name="aura" type="MeshInstance3D" parent="World/Level/grayball"]
-visible = false
-mesh = SubResource("SphereMesh_pu2xm")
-
-[node name="pinkball" type="RigidBody3D" parent="World/Level" groups=["grabbable", "mergeable"]]
+[node name="pink_atom" parent="World/Level" instance=ExtResource("5_x7o8f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -20.3307, 5.0108, -29.7789)
-gravity_scale = 0.0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Level/pinkball"]
-shape = SubResource("SphereShape3D_8n1gc")
+[node name="MeshInstance3D2" parent="World/Level/pink_atom" index="1"]
+mesh = SubResource("SphereMesh_kcaiv")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="World/Level/pinkball"]
-mesh = SubResource("SphereMesh_7m86i")
-
-[node name="aura" type="MeshInstance3D" parent="World/Level/pinkball"]
-visible = false
-mesh = SubResource("SphereMesh_pu2xm")
-
-[node name="orangeball" type="RigidBody3D" parent="World/Level" groups=["grabbable", "mergeable"]]
+[node name="orange_atom" parent="World/Level" instance=ExtResource("5_x7o8f")]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -31.3307, 5.0108, 14.2211)
-gravity_scale = 0.0
 
-[node name="CollisionShape3D" type="CollisionShape3D" parent="World/Level/orangeball"]
-shape = SubResource("SphereShape3D_8n1gc")
-
-[node name="MeshInstance3D" type="MeshInstance3D" parent="World/Level/orangeball"]
-mesh = SubResource("SphereMesh_ifb4w")
-
-[node name="aura" type="MeshInstance3D" parent="World/Level/orangeball"]
-visible = false
-mesh = SubResource("SphereMesh_pu2xm")
+[node name="MeshInstance3D2" parent="World/Level/orange_atom" index="1"]
+mesh = SubResource("SphereMesh_g0hb2")
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="World"]
 
@@ -329,4 +252,12 @@ visible = false
 [connection signal="pressed" from="PauseMenu/MainPauseMenu/VBoxContainer/BackToMainButton2" to="." method="_on_back_to_main_button_pressed"]
 
 [editable path="World/Player"]
+[editable path="World/Level/blue_atom"]
+[editable path="World/Level/green_atom2"]
+[editable path="World/Level/white_atom"]
+[editable path="World/Level/yellow_atom"]
+[editable path="World/Level/red_atom"]
+[editable path="World/Level/green_atom"]
+[editable path="World/Level/pink_atom"]
+[editable path="World/Level/orange_atom"]
 [editable path="PauseMenu"]
