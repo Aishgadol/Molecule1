@@ -1,9 +1,21 @@
-extends RigidBody3D
+class_name Atom
+extends Node3D
 
-var element_name=" " #helium, neon, etc
-var numElectrons=0
+static var id_counter:int =0
+
+var id : int 
+var numElectrons : int
+var elementSymbol: String
+var atomicNumber : int
 
 
+func _init(atomic_num:int):
+	atomicNumber=atomic_num
+	id=id_counter
+	id_counter+=1
+	numElectrons=atomicNumber
+	
+	
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
 	pass # Replace with function body.
