@@ -12,9 +12,8 @@ var paused: bool = false
 func _ready() ->void:
 	camera.set_root(self)
 	camera.rotation_degrees=Vector3(45,105,0)
-	var path="user://temp_zmat.zmat"
 	
-	var zmat_file=File.new()
+	
 	
 func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("pause") and !going_back:  # This is typically mapped to the ESC key
