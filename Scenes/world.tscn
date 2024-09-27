@@ -23,8 +23,12 @@ tonemap_mode = 2
 glow_enabled = true
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v74qw"]
+albedo_color = Color(0.830335, 0.830335, 0.830335, 1)
 albedo_texture = ExtResource("1_o1cb3")
 albedo_texture_force_srgb = true
+metallic = 0.25
+metallic_texture_channel = 1
+roughness = 0.5
 uv1_scale = Vector3(10, 10, 10)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dlx3w"]
@@ -112,7 +116,7 @@ script = ExtResource("1_sier2")
 [node name="World" type="Node3D" parent="."]
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="World"]
-transform = Transform3D(-0.900851, -0.424295, 0.0918704, 0.142212, -0.0884742, 0.985874, -0.410173, 0.901191, 0.140042, 0, 204.714, 0)
+transform = Transform3D(-0.900852, -0.424295, 0.0918705, 0.142212, -0.0884743, 0.985874, -0.410173, 0.901191, 0.140042, -1883.92, 204.714, -2795.83)
 shadow_enabled = true
 
 [node name="WorldEnvironment" type="WorldEnvironment" parent="World"]

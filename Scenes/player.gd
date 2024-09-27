@@ -1,8 +1,8 @@
 extends CharacterBody3D
 
 # Movement parameters
-@export var move_speed: float = 20.0  # Increased walking speed
-@export var sprint_speed: float = 30.0  # Increased sprint speed
+@export var move_speed: float = 30.0  # Increased walking speed
+@export var sprint_speed: float = 40.0  # Increased sprint speed
 @export var acceleration: float = 15.0
 @export var deacceleration: float = 10.0
 @export var bobbing_amplitude: float = 0.10  # Reduced amplitude for less noticeable bobbing
