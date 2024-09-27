@@ -4,6 +4,7 @@ extends Node3D
 @onready var player=$World/Player
 @onready var camera = $World/Player/PlayerCamera
 @onready var level=$World/Level
+@onready var floor=$World/Level/Floor/CSGCylinder3D
 @onready var going_back=false
 @export var doc_mgr_script :Resource=preload("res://Scripts/DocumentManager.gd")
 @onready var explosion_scene:PackedScene =preload("res://Scenes/vfx_explosion.tscn")
@@ -44,8 +45,29 @@ func _process(delta: float) -> void:
 		
 	if Input.is_action_just_pressed("pause") and fileExplorerDisplaying:
 		fileExplorerDisplaying=false
+		
+	check_player_boundary()
 	
 
+func check_player_boundary() -> void:
+	# Get player's position
+	var player_pos: Vector3 = player.global_transform.origin
+
+	# Get the distance from the origin (0,0,0)
+	var distance_from_center: float = player_pos.length()
+
+	# Get the radius of the floor (assuming it's the cylinder's radius)
+	var floor_radius: float = floor.radius
+
+	# If the player is outside the floor's radius, move them back to the edge
+	if distance_from_center > floor_radius:
+		# Normalize player's position to get the direction from the center
+		var direction_from_center: Vector3 = player_pos.normalized()
+
+		# Set the player's position to the edge of the floor (on the radius)
+		player.global_transform.origin = direction_from_center * floor_radius
+		
+		
 func _on_back_to_main_button_pressed() -> void:
 	going_back=true
 	$World/Player/CanvasLayer.visible=false

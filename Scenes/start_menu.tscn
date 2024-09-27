@@ -351,6 +351,7 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
 [node name="CSGCylinder3D" type="CSGCylinder3D" parent="Background/Level/Floor"]
 radius = 250.0
 height = 0.1
+sides = 64
 material = SubResource("StandardMaterial3D_w0tum")
 
 [node name="Spotlights" type="Node3D" parent="Background/Level"]

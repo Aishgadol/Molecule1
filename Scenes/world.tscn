@@ -1,4 +1,4 @@
-[gd_scene load_steps=29 format=3 uid="uid://cs24c6bcipuux"]
+[gd_scene load_steps=28 format=3 uid="uid://cs24c6bcipuux"]
 
 [ext_resource type="Texture2D" uid="uid://d3qoet7kbkvxj" path="res://Textures/woodfloor.jpg" id="1_o1cb3"]
 [ext_resource type="Script" path="res://Scripts/world.gd" id="1_sier2"]
@@ -21,11 +21,6 @@ sky = SubResource("Sky_i7dvd")
 sky_rotation = Vector3(3.14159, 0.610865, 0)
 tonemap_mode = 2
 glow_enabled = true
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v8pu2"]
-albedo_color = Color(1, 1, 0.870588, 1)
-albedo_texture = ExtResource("1_o1cb3")
-metallic_specular = 0.84
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v74qw"]
 albedo_texture = ExtResource("1_o1cb3")
@@ -131,33 +126,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 9, 0)
 [node name="Floor" type="Node3D" parent="World/Level"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
 
-[node name="Floor1" type="CSGBox3D" parent="World/Level/Floor"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 0, 25)
-visible = false
-size = Vector3(50, 0.1, 50)
-material = SubResource("StandardMaterial3D_v8pu2")
-
-[node name="Floor2" type="CSGBox3D" parent="World/Level/Floor"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 0, -25)
-visible = false
-size = Vector3(50, 0.1, 50)
-material = SubResource("StandardMaterial3D_v8pu2")
-
-[node name="Floor3" type="CSGBox3D" parent="World/Level/Floor"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 0, 25)
-visible = false
-size = Vector3(50, 0.1, 50)
-material = SubResource("StandardMaterial3D_v8pu2")
-
-[node name="Floor4" type="CSGBox3D" parent="World/Level/Floor"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 0, -25)
-visible = false
-size = Vector3(50, 0.1, 50)
-material = SubResource("StandardMaterial3D_v8pu2")
-
 [node name="CSGCylinder3D" type="CSGCylinder3D" parent="World/Level/Floor"]
 radius = 250.0
 height = 0.1
+sides = 64
 material = SubResource("StandardMaterial3D_v74qw")
 
 [node name="Spotlights" type="Node3D" parent="World/Level"]
