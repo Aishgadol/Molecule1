@@ -1,26 +1,32 @@
-[gd_scene load_steps=52 format=3 uid="uid://bx4ga4lo23ehg"]
+[gd_scene load_steps=53 format=3 uid="uid://bx4ga4lo23ehg"]
 
+[ext_resource type="Texture2D" uid="uid://crpj7dsr7xqyu" path="res://Textures/AllSky_Space_AnotherPlanet Equirect.png" id="1_gb17s"]
 [ext_resource type="Texture2D" uid="uid://d3qoet7kbkvxj" path="res://Textures/woodfloor.jpg" id="1_tb35t"]
-[ext_resource type="Texture2D" uid="uid://bfec6aaoecgyu" path="res://Textures/nightsky.jpg" id="2_3hp3v"]
 [ext_resource type="Texture2D" uid="uid://b4ldce00l8c0i" path="res://Textures/icon.svg" id="3_efe67"]
 [ext_resource type="Script" path="res://Scripts/MainMenuScript.gd" id="4_m4h4r"]
 [ext_resource type="Script" path="res://Scripts/menu_camera.gd" id="5_lsehn"]
 [ext_resource type="Script" path="res://Scripts/options_label.gd" id="6_0piwa"]
 [ext_resource type="AudioStream" uid="uid://crpv8b05gnu3i" path="res://my_guy_vivaldi_classical.mp3" id="7_qh2kd"]
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_x7gdb"]
-albedo_color = Color(1, 1, 0.870588, 1)
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_glteb"]
+panorama = ExtResource("1_gb17s")
+
+[sub_resource type="Sky" id="Sky_4mhvr"]
+sky_material = SubResource("PanoramaSkyMaterial_glteb")
+process_mode = 1
+radiance_size = 4
+
+[sub_resource type="Environment" id="Environment_k2j6m"]
+background_mode = 2
+sky = SubResource("Sky_4mhvr")
+sky_rotation = Vector3(3.14159, 0.610865, 0)
+tonemap_mode = 2
+glow_enabled = true
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_w0tum"]
 albedo_texture = ExtResource("1_tb35t")
-metallic_specular = 0.84
-
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_wkuid"]
-cull_mode = 1
-albedo_texture = ExtResource("2_3hp3v")
-
-[sub_resource type="SphereMesh" id="SphereMesh_vo0om"]
-material = SubResource("StandardMaterial3D_wkuid")
-radius = 100.0
-height = 125.0
+albedo_texture_force_srgb = true
+uv1_scale = Vector3(10, 10, 10)
 
 [sub_resource type="SphereShape3D" id="SphereShape3D_24146"]
 radius = 4.0
@@ -328,6 +334,13 @@ _data = {
 
 [node name="StartMenu" type="CanvasLayer"]
 
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="."]
+transform = Transform3D(-0.866023, -0.433016, 0.250001, 0.260358, 0.0363311, 0.964828, -0.426869, 0.900654, 0.0812755, 0, 253.938, 0)
+shadow_enabled = true
+
+[node name="WorldEnvironment" type="WorldEnvironment" parent="."]
+environment = SubResource("Environment_k2j6m")
+
 [node name="Background" type="Node3D" parent="."]
 
 [node name="Level" type="Node3D" parent="Background"]
@@ -335,51 +348,32 @@ _data = {
 [node name="Floor" type="Node3D" parent="Background/Level"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
 
-[node name="Floor1" type="CSGBox3D" parent="Background/Level/Floor"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 0, 25)
-size = Vector3(50, 0.1, 50)
-material = SubResource("StandardMaterial3D_x7gdb")
-
-[node name="Floor2" type="CSGBox3D" parent="Background/Level/Floor"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 0, -25)
-size = Vector3(50, 0.1, 50)
-material = SubResource("StandardMaterial3D_x7gdb")
-
-[node name="Floor3" type="CSGBox3D" parent="Background/Level/Floor"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 0, 25)
-size = Vector3(50, 0.1, 50)
-material = SubResource("StandardMaterial3D_x7gdb")
-
-[node name="Floor4" type="CSGBox3D" parent="Background/Level/Floor"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 0, -25)
-size = Vector3(50, 0.1, 50)
-material = SubResource("StandardMaterial3D_x7gdb")
-
-[node name="NightSky" type="MeshInstance3D" parent="Background/Level"]
-transform = Transform3D(1, 0, 0, 0, -1, -8.74228e-08, 0, 8.74228e-08, -1, 0, 2, 0)
-mesh = SubResource("SphereMesh_vo0om")
-skeleton = NodePath("../..")
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="Background/Level/Floor"]
+radius = 250.0
+height = 0.1
+material = SubResource("StandardMaterial3D_w0tum")
 
 [node name="Spotlights" type="Node3D" parent="Background/Level"]
+transform = Transform3D(2, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
 
 [node name="SpotLight3D" type="SpotLight3D" parent="Background/Level/Spotlights"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 75, 0)
+transform = Transform3D(0.5, 0, 0, 0, -2.18557e-08, 0.5, 0, -0.5, -2.18557e-08, 0, 102.631, 0)
 light_color = Color(0.924879, 0.677451, 0.401764, 1)
 light_energy = 100.0
 light_indirect_energy = 100.0
 light_size = 0.884
 light_specular = 0.0
-spot_range = 200.0
+spot_range = 300.0
 spot_angle = 61.5
 
 [node name="SpotLight3D2" type="SpotLight3D" parent="Background/Level/Spotlights"]
-transform = Transform3D(1, 0, 0, 0, 1.31134e-07, -1, 0, 1, 1.31134e-07, 0, -59, 0)
+transform = Transform3D(0.5, 0, 0, 0, 6.5567e-08, -0.5, 0, 0.5, 6.5567e-08, 0, -77.4134, 0)
 light_color = Color(0.924879, 0.677451, 0.401764, 1)
 light_energy = 100.0
 light_indirect_energy = 100.0
 light_size = 0.884
 light_specular = 0.0
-spot_range = 200.0
+spot_range = 300.0
 spot_angle = 61.5
 
 [node name="SpotLight3D3" type="SpotLight3D" parent="Background/Level/Spotlights"]
@@ -393,7 +387,7 @@ spot_range = 200.0
 spot_angle = 61.5
 
 [node name="SpotLight3D4" type="SpotLight3D" parent="Background/Level/Spotlights"]
-transform = Transform3D(1, 0, 0, 0, -1, -2.83122e-07, 0, 2.83122e-07, -1, 0, 44, -75)
+transform = Transform3D(0.5, 0, 0, 0, -0.5, -1.41561e-07, 0, 1.41561e-07, -0.5, 0.0696716, 44, -166.339)
 light_color = Color(0.924879, 0.677451, 0.401764, 1)
 light_energy = 100.0
 light_indirect_energy = 100.0
@@ -565,7 +559,7 @@ text = "Molecule1
 
 [node name="MarginContainer" type="MarginContainer" parent="MainMenuContainer/MainMenu/VBoxContainer"]
 layout_mode = 2
-theme_override_constants/margin_top = 200
+theme_override_constants/margin_top = 350
 
 [node name="StartButton" type="Button" parent="MainMenuContainer/MainMenu/VBoxContainer"]
 layout_mode = 2

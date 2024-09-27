@@ -1,46 +1,57 @@
-extends Node3D
+extends Node
+
+var loaded_zmat:String=""
+signal file_dialog_done
 
 var script_path:String
 var script_path_global:String
-# Called when the node enters the scene tree for the first time.
-func _ready() -> void:
+
+func run()->void:
+	print("okay lets go doc mgr")
 	script_path = "res://gc.py"
 	script_path_global = ProjectSettings.globalize_path(script_path)
 	if !FileAccess.file_exists(script_path_global):
 		push_error("Python script 'gc.py' not found at path: %s" % script_path_global)
 	else:
 		print("Python script 'gc.py' found at path: %s" % script_path_global)
+		
+func read_zmat_from_files() -> String:
+	open_zmatrix_file()
+	await file_dialog_done
+	return loaded_zmat
 	
-	
-	
-# Called every frame. 'delta' is the elapsed time since the previous frame.
-func _process(delta: float) -> void:
-	pass
-
-func open_zmatrix_file() -> String:
+func open_zmatrix_file() -> void:
 	var file_dialog = FileDialog.new()
 	file_dialog.access = FileDialog.ACCESS_FILESYSTEM
-	file_dialog.mode = FileDialog.FILE_MODE_OPEN_FILE
+	file_dialog.mode = FileDialog.FILE_MODE_OPEN_FILES
+	file_dialog.set_size(Vector2(400,300))
 	file_dialog.filters = ["*.csv", "*.txt", "*.zmat"]
+	file_dialog.connect("popup_hide", Callable(self, "_on_file_dialog_closed"))
+	file_dialog.connect("file_selected", Callable(self, "_on_file_selected"))
 	add_child(file_dialog)
 	file_dialog.popup_centered()
-
-	await file_dialog.wait_for_signal("file_selected")
-	var file_path = file_dialog.get_current_path()
-	if file_path:
-		var content = load_file_content(file_path)
-		if content != null and is_valid_zmatrix(content):
-			return content
-		else:
-			print("Invalid Z-matrix format.")
-			return ""
+	
+	
+func _on_file_dialog_closed() -> void:
+	loaded_zmat=""
+	emit_signal("file_dialog_done")
+	
+func _on_file_selected(file_path: String) -> void:
+	var content = load_file_content(file_path)
+	if content != null and is_valid_zmatrix(content):
+		loaded_zmat=content
 	else:
-		print("No file selected.")
-		return ""
-
+		print("Invalid Z-matrix format or no file selected.")
+		loaded_zmat=""
+	
+	emit_signal("file_dialog_done")
+	
 func load_file_content(file_path: String) -> String:
-	var file = FileAccess.open(file_path, FileAccess.WRITE)
-	if file !=null:
+	var file_extension = file_path.get_extension().to_lower()
+	if file_extension != "csv" and file_extension != "txt" and file_extension != "zmat" and file_extension != "xyz":
+			return "Wrong File Format"
+	var file = FileAccess.open(file_path,FileAccess.READ)
+	if file != null:
 		var content = file.get_as_text()
 		file.close()
 		return content
@@ -51,10 +62,11 @@ func is_valid_zmatrix(content: String) -> bool:
 	var lines = content.strip_edges().split("\n", false)
 	var line_count = 0
 	for line in lines:
+		line.replace("\r","")
 		line = line.strip_edges()
 		if line == "":
 			continue  # Skip empty lines
-		var tokens = line.split()
+		var tokens = line.split(" ",false)
 		line_count += 1
 		if line_count == 1:
 			# First line should have one token
@@ -73,7 +85,7 @@ func is_valid_zmatrix(content: String) -> bool:
 			if tokens.size() != 7:
 				return false
 	return true
-	
+
 func convert_zmatrix_to_coordinates(z_matrix_string: String) -> Array:
 	var coordinates = []
 	var zmat_file_path = "user://temp_zmat.zmat"  # Changed to user:// for export compatibility

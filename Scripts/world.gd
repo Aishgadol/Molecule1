@@ -5,12 +5,20 @@ extends Node3D
 @onready var camera = $World/Player/PlayerCamera
 @onready var level=$World/Level
 @onready var going_back=false
+@export var doc_mgr_script :Resource=preload("res://Scripts/DocumentManager.gd")
 @onready var explosion_scene:PackedScene =preload("res://Scenes/vfx_explosion.tscn")
 
+var doc_mgr
 var sphere_radius:float=4.0 #might change later if atoms become smaller/larger
 var paused: bool = false
+var fileExplorerDisplaying:bool=false
+
 func _ready() ->void:
 	camera.set_root(self)
+	print("okay lets go world")
+	doc_mgr=doc_mgr_script.new()
+	add_child(doc_mgr)
+	doc_mgr.run()
 	camera.rotation_degrees=Vector3(45,105,0)
 	
 	
@@ -28,6 +36,15 @@ func _process(delta: float) -> void:
 		
 		camera.set_paused_state(paused)  # Notify the camera script of the pause state
 		
+	if Input.is_action_just_pressed("ui_select") and paused and !fileExplorerDisplaying: 
+		fileExplorerDisplaying=true
+		var outputs=await doc_mgr.read_zmat_from_files()
+		print(outputs,"\n")
+		fileExplorerDisplaying=false
+		
+	if Input.is_action_just_pressed("pause") and fileExplorerDisplaying:
+		fileExplorerDisplaying=false
+	
 
 func _on_back_to_main_button_pressed() -> void:
 	going_back=true

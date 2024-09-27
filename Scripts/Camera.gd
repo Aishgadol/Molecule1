@@ -93,7 +93,7 @@ func _input(event):
 		vertical_rotation -= mouse_delta.y * mouse_sensitivity
 
 		# Clamp the vertical rotation to avoid flipping
-		vertical_rotation = clamp(vertical_rotation, -90, 90)
+		vertical_rotation = clamp(vertical_rotation, -89.5, 89.5)
 		rotation_degrees.x = vertical_rotation
 
 	if grabbed_object and event is InputEventMouseButton:

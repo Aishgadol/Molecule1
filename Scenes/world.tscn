@@ -2,21 +2,23 @@
 
 [ext_resource type="Texture2D" uid="uid://d3qoet7kbkvxj" path="res://Textures/woodfloor.jpg" id="1_o1cb3"]
 [ext_resource type="Script" path="res://Scripts/world.gd" id="1_sier2"]
+[ext_resource type="Texture2D" uid="uid://crpj7dsr7xqyu" path="res://Textures/AllSky_Space_AnotherPlanet Equirect.png" id="2_0jun2"]
 [ext_resource type="PackedScene" uid="uid://uoq5r2lvraly" path="res://Scenes/player.tscn" id="2_1d3v8"]
-[ext_resource type="Texture2D" uid="uid://bfec6aaoecgyu" path="res://Textures/nightsky.jpg" id="2_nj2dh"]
 [ext_resource type="PackedScene" uid="uid://p42ftxav826i" path="res://Scenes/pause_menu.tscn" id="5_4j80j"]
 [ext_resource type="PackedScene" uid="uid://id1b0i4dbwx3" path="res://Scenes/atom.tscn" id="5_x7o8f"]
+[ext_resource type="Script" path="res://Scripts/DocumentManager.gd" id="7_bx2qa"]
 
-[sub_resource type="ProceduralSkyMaterial" id="ProceduralSkyMaterial_cun67"]
-sky_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
-ground_horizon_color = Color(0.64625, 0.65575, 0.67075, 1)
+[sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_0ivgh"]
+panorama = ExtResource("2_0jun2")
 
 [sub_resource type="Sky" id="Sky_i7dvd"]
-sky_material = SubResource("ProceduralSkyMaterial_cun67")
+sky_material = SubResource("PanoramaSkyMaterial_0ivgh")
+radiance_size = 1
 
 [sub_resource type="Environment" id="Environment_vagyq"]
 background_mode = 2
 sky = SubResource("Sky_i7dvd")
+sky_rotation = Vector3(3.14159, 0.610865, 0)
 tonemap_mode = 2
 glow_enabled = true
 
@@ -25,14 +27,10 @@ albedo_color = Color(1, 1, 0.870588, 1)
 albedo_texture = ExtResource("1_o1cb3")
 metallic_specular = 0.84
 
-[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_bgxsp"]
-cull_mode = 1
-albedo_texture = ExtResource("2_nj2dh")
-
-[sub_resource type="SphereMesh" id="SphereMesh_31n0u"]
-material = SubResource("StandardMaterial3D_bgxsp")
-radius = 100.0
-height = 125.0
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_v74qw"]
+albedo_texture = ExtResource("1_o1cb3")
+albedo_texture_force_srgb = true
+uv1_scale = Vector3(10, 10, 10)
 
 [sub_resource type="StandardMaterial3D" id="StandardMaterial3D_dlx3w"]
 albedo_color = Color(0.107796, 0.344801, 1, 1)
@@ -118,6 +116,10 @@ script = ExtResource("1_sier2")
 
 [node name="World" type="Node3D" parent="."]
 
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="World"]
+transform = Transform3D(-0.900851, -0.424295, 0.0918704, 0.142212, -0.0884742, 0.985874, -0.410173, 0.901191, 0.140042, 0, 204.714, 0)
+shadow_enabled = true
+
 [node name="WorldEnvironment" type="WorldEnvironment" parent="World"]
 environment = SubResource("Environment_vagyq")
 
@@ -131,49 +133,54 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -0.1, 0)
 
 [node name="Floor1" type="CSGBox3D" parent="World/Level/Floor"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 0, 25)
+visible = false
 size = Vector3(50, 0.1, 50)
 material = SubResource("StandardMaterial3D_v8pu2")
 
 [node name="Floor2" type="CSGBox3D" parent="World/Level/Floor"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 0, -25)
+visible = false
 size = Vector3(50, 0.1, 50)
 material = SubResource("StandardMaterial3D_v8pu2")
 
 [node name="Floor3" type="CSGBox3D" parent="World/Level/Floor"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -25, 0, 25)
+visible = false
 size = Vector3(50, 0.1, 50)
 material = SubResource("StandardMaterial3D_v8pu2")
 
 [node name="Floor4" type="CSGBox3D" parent="World/Level/Floor"]
 transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 25, 0, -25)
+visible = false
 size = Vector3(50, 0.1, 50)
 material = SubResource("StandardMaterial3D_v8pu2")
 
-[node name="NightSky" type="MeshInstance3D" parent="World/Level"]
-transform = Transform3D(1, 0, 0, 0, -1, -8.74228e-08, 0, 8.74228e-08, -1, 0, 2, 0)
-mesh = SubResource("SphereMesh_31n0u")
-skeleton = NodePath("../..")
+[node name="CSGCylinder3D" type="CSGCylinder3D" parent="World/Level/Floor"]
+radius = 250.0
+height = 0.1
+material = SubResource("StandardMaterial3D_v74qw")
 
 [node name="Spotlights" type="Node3D" parent="World/Level"]
+transform = Transform3D(11.3172, 0, 0, 0, 2, 0, 0, 0, 2, 0, 0, 0)
 
 [node name="SpotLight3D" type="SpotLight3D" parent="World/Level/Spotlights"]
-transform = Transform3D(1, 0, 0, 0, -4.37114e-08, 1, 0, -1, -4.37114e-08, 0, 75, 0)
+transform = Transform3D(0.088361, 0, 0, 0, -2.18557e-08, 0.5, 0, -0.5, -2.18557e-08, 0.0378598, 82.0451, -1.20378)
 light_color = Color(0.924879, 0.677451, 0.401764, 1)
 light_energy = 100.0
 light_indirect_energy = 100.0
-light_size = 0.884
+light_size = 1.0
 light_specular = 0.0
-spot_range = 200.0
+spot_range = 300.0
 spot_angle = 61.5
 
 [node name="SpotLight3D2" type="SpotLight3D" parent="World/Level/Spotlights"]
-transform = Transform3D(1, 0, 0, 0, 1.31134e-07, -1, 0, 1, 1.31134e-07, 0, -59, 0)
+transform = Transform3D(0.088361, 0, 0, 0, 6.5567e-08, -0.5, 0, 0.5, 6.5567e-08, 0, -76.7932, 0)
 light_color = Color(0.924879, 0.677451, 0.401764, 1)
 light_energy = 100.0
 light_indirect_energy = 100.0
 light_size = 0.884
 light_specular = 0.0
-spot_range = 200.0
+spot_range = 350.0
 spot_angle = 61.5
 
 [node name="SpotLight3D3" type="SpotLight3D" parent="World/Level/Spotlights"]
@@ -187,7 +194,7 @@ spot_range = 200.0
 spot_angle = 61.5
 
 [node name="SpotLight3D4" type="SpotLight3D" parent="World/Level/Spotlights"]
-transform = Transform3D(1, 0, 0, 0, -1, -2.83122e-07, 0, 2.83122e-07, -1, 0, 44, -75)
+transform = Transform3D(0.088361, 0, 0, 0, -0.5, -1.41561e-07, 0, 1.41561e-07, -0.5, 0, 44, -175.254)
 light_color = Color(0.924879, 0.677451, 0.401764, 1)
 light_energy = 100.0
 light_indirect_energy = 100.0
@@ -248,6 +255,9 @@ mesh = SubResource("SphereMesh_g0hb2")
 
 [node name="PauseMenu" parent="." instance=ExtResource("5_4j80j")]
 visible = false
+
+[node name="DocumentManager" type="Node" parent="."]
+script = ExtResource("7_bx2qa")
 
 [connection signal="pressed" from="PauseMenu/MainPauseMenu/VBoxContainer/BackToMainButton2" to="." method="_on_back_to_main_button_pressed"]
 

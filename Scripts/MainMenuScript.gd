@@ -6,14 +6,16 @@ extends Control
 @onready var music_on_off_button=$OptionMenu/VBoxContainer/HBoxContainer/MusicOnOffButton
 @onready var vBox=$MainMenu/VBoxContainer
 @onready var colorRect=$ColorRect
-
 var musicOn=true;
 var way = 1
+
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
+	print("okay lets go mainmenuscript")
 	audio_player.volume_db=-12
 	audio_player.play() # Replace with function body.
-
+	
+	
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
