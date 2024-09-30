@@ -31,10 +31,7 @@ func addAtom(_atom :Atom)->void:
 	for bond in connections:
 		print(" Atom ID: ",bond["id"], ", Bond Order: ",bond["order"])
 	
-	
-	
-	
-	
+
 func add_bond(atom1_id:int,atom2_id:int, bond_order:int):
 	bonds_list[atom1_id].append({"id": atom2_id, "order": bond_order})
 	bonds_list[atom2_id].append({"id": atom1_id, "order": bond_order})

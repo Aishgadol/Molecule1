@@ -25,6 +25,7 @@ func getCurrentMenu()->String:
 	return ""
 func _on_back_to_pause_screen_button_pressed() -> void:
 	$OptionMenu.visible=false
+	$MoleculeManagementMenu.visible=false
 	pauseMenu.visible=true
 
 
@@ -37,7 +38,11 @@ func _on_resume_button_pressed() -> void:
 	Input.action_press("pause")
 	Input.action_release("pause")
 
-
+func _on_molecule_management_button_pressed()->void:
+	pauseMenu.visible=false
+	$MoleculeManagementMenu.visible=true
+	
+	
 func _on_back_to_main_button_pressed() -> void:
 	colorRect.visible=true
 	for child in mainMenuVBox.get_children():
@@ -47,3 +52,8 @@ func _on_back_to_main_button_pressed() -> void:
 	anim_player.play("fade_to_black")
 	await anim_player.animation_finished
 	get_tree().change_scene_to_file("res://Scenes/start_menu.tscn")
+
+
+func _on_import_zmat_pressed() -> void:
+	Input.action_press("importZmat")
+	Input.action_release("importZmat")

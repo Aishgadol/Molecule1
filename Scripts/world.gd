@@ -9,7 +9,7 @@ extends Node3D
 @export var doc_mgr_script :Resource=preload("res://Scripts/DocumentManager.gd")
 @onready var explosion_scene:PackedScene =preload("res://Scenes/vfx_explosion.tscn")
 
-var doc_mgr
+
 var sphere_radius:float=4.0 #might change later if atoms become smaller/larger
 var paused: bool = false
 var fileExplorerDisplaying:bool=false
@@ -17,9 +17,7 @@ var fileExplorerDisplaying:bool=false
 func _ready() ->void:
 	camera.set_root(self)
 	print("okay lets go world")
-	doc_mgr=doc_mgr_script.new()
-	add_child(doc_mgr)
-	doc_mgr.run()
+	
 	camera.rotation_degrees=Vector3(45,105,0)
 	
 	
@@ -40,12 +38,18 @@ func _process(delta: float) -> void:
 	if Input.is_action_just_pressed("ui_select") and paused and !fileExplorerDisplaying: 
 		fileExplorerDisplaying=true
 		var outputs=await doc_mgr.read_zmat_from_files()
-		print(outputs,"\n")
+		var res=doc_mgr.convert_zmatrix_to_coordinates(outputs)
+		for r in res.coordinates:
+			print(r)
+		print("Adjancies: ")
+		for r in res.bonds:
+			print(r)
 		fileExplorerDisplaying=false
 		
 	if Input.is_action_just_pressed("pause") and fileExplorerDisplaying:
 		fileExplorerDisplaying=false
-		
+	
+	#making sure player doesnt go off bounds
 	check_player_boundary()
 	
 

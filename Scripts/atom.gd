@@ -5,16 +5,13 @@ static var id_counter:int =0
 
 var id : int 
 var numElectrons : int
-var elementSymbol: String
-var atomicNumber : int
+var symbol:String
 
 
-func _init(atomic_num:int):
-	atomicNumber=atomic_num
+func _init(_symbol:String):
+	symbol=_symbol
 	id=id_counter
 	id_counter+=1
-	numElectrons=atomicNumber
-	
 	
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:

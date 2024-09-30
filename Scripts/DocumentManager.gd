@@ -1,3 +1,4 @@
+class_name DocumentManager
 extends Node
 
 var loaded_zmat:String=""
@@ -59,6 +60,7 @@ func load_file_content(file_path: String) -> String:
 		return ""
 
 func is_valid_zmatrix(content: String) -> bool:
+	
 	var lines = content.strip_edges().split("\n", false)
 	var line_count = 0
 	for line in lines:
@@ -86,8 +88,32 @@ func is_valid_zmatrix(content: String) -> bool:
 				return false
 	return true
 
-func convert_zmatrix_to_coordinates(z_matrix_string: String) -> Array:
+func extract_bonds_from_zmatrix(content: String) -> Array:
+	var bonds = []
+	var lines = content.strip_edges().split("\n", false)
+	var line_count = 0
+	for line in lines:
+		line = line.strip_edges()
+		if line == "":
+			continue  # Skip empty lines
+		var tokens = line.split(" ", false)
+		line_count += 1
+		var current_atom_index = line_count - 1  # 0-based index
+		if line_count == 1:
+			# First atom has no bonds
+			continue
+		else:
+			# Only consider the bond length index (tokens[1]) for bonding
+			if tokens.size() >= 2:
+				var connected_atom_index = int(tokens[1]) - 1  # Convert to 0-based index
+				var bond = [min(current_atom_index, connected_atom_index), max(current_atom_index, connected_atom_index)]
+				if bond not in bonds:
+					bonds.append(bond)
+	return bonds
+
+func convert_zmatrix_to_coordinates(z_matrix_string: String) -> Dictionary:
 	var coordinates = []
+	var bonds = []
 	var zmat_file_path = "user://temp_zmat.zmat"  # Changed to user:// for export compatibility
 
 	# Write the Z-matrix string to a temporary file using FileAccess
@@ -120,7 +146,7 @@ func convert_zmatrix_to_coordinates(z_matrix_string: String) -> Array:
 		push_error("Python script execution failed with exit code: %d" % exit_code)
 		for x in output:
 			push_error("Error output: %s" % (x + "\n"))
-		return coordinates
+		return {"coordinates":{}, "bonds":{}}
 	
 	# Get the output from the process
 	var stdout:String=""
@@ -134,14 +160,14 @@ func convert_zmatrix_to_coordinates(z_matrix_string: String) -> Array:
 	
 	if lines.size() < 3:
 		push_error("Invalid output from Python script.")
-		return coordinates
+		return {"coordinates":{}, "bonds":{}}
 
 	var num_atoms = int(lines[0])
 	var title_line = lines[1]
 	
 	if lines.size() < num_atoms + 2:
 		push_error("Incomplete atom data in output.")
-		return coordinates
+		return {"coordinates":{}, "bonds":{}}
 
 	# Extract atom coordinates
 	for i in range(2, 2 + num_atoms):
@@ -178,8 +204,9 @@ func convert_zmatrix_to_coordinates(z_matrix_string: String) -> Array:
 	if dir:
 		dir.remove("temp_zmat.zmat")
 	
-	return coordinates
-
+	bonds=extract_bonds_from_zmatrix(z_matrix_string)
+	
+	return {"coordinates":coordinates, "bonds":bonds}
 
 func convert_coordinates_to_zmatrix(cartesian_string: String) -> String:
 	var zmat_string = ""
