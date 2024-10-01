@@ -1,11 +1,13 @@
 class_name DocumentManager
 extends Node
 
+var file_dialog: FileDialog=null
 var working_with:String=""
 var loaded_info:String=""
 var content_load_error:bool=false
 signal file_dialog_done
 
+var last_selected_filename:String=""
 var script_path:String
 var script_path_global:String
 
@@ -30,9 +32,9 @@ func read_xyz_from_files()->String:
 	
 func open_zmatrix_file() -> void:
 	working_with="zmat"
-	var file_dialog = FileDialog.new()
+	file_dialog = FileDialog.new()
 	file_dialog.access = FileDialog.ACCESS_FILESYSTEM
-	file_dialog.mode = FileDialog.FILE_MODE_OPEN_FILES
+	file_dialog.set_file_mode(FileDialog.FILE_MODE_OPEN_FILES)
 	file_dialog.set_size(Vector2(400,300))
 	file_dialog.filters = ["*.csv", "*.txt", "*.zmat"]
 	file_dialog.connect("popup_hide", Callable(self, "_on_file_dialog_closed"))
@@ -42,9 +44,9 @@ func open_zmatrix_file() -> void:
 	
 func open_xyz_file()->void:
 	working_with="xyz"
-	var file_dialog = FileDialog.new()
+	file_dialog = FileDialog.new()
 	file_dialog.access = FileDialog.ACCESS_FILESYSTEM
-	file_dialog.mode = FileDialog.FILE_MODE_OPEN_FILES
+	file_dialog.set_file_mode(FileDialog.FILE_MODE_OPEN_FILES)
 	file_dialog.set_size(Vector2(400,300))
 	file_dialog.filters = ["*.csv", "*.txt", "*.xyz"]
 	file_dialog.connect("popup_hide", Callable(self, "_on_file_dialog_closed"))
@@ -54,13 +56,16 @@ func open_xyz_file()->void:
 	
 func _on_file_dialog_closed() -> void:
 	loaded_info=""
+	file_dialog.queue_free()
 	emit_signal("file_dialog_done")
 	
 func _on_file_selected(file_path: String) -> void:
+	last_selected_filename=file_path.get_file()
 	var content = load_file_content(file_path)
 	if(content_load_error):
 		print("Invalid Z-matrix/XYZ format or no file selected.")
 		loaded_info=""
+		file_dialog.queue_free()
 		return
 	if content != null:
 		if working_with == "zmat" and is_valid_zmatrix(content):
@@ -74,6 +79,7 @@ func _on_file_selected(file_path: String) -> void:
 		print("Invalid Z-matrix/XYZ format or no file selected.")
 		loaded_info=""
 	
+	file_dialog.queue_free()
 	emit_signal("file_dialog_done")
 	
 func load_file_content(file_path: String) -> String:
@@ -299,12 +305,16 @@ func convert_coordinates_to_zmatrix(cartesian_string: String) -> Dictionary:
 func import_zmat():
 	content_load_error=false
 	var zmat_string=await read_zmat_from_files()
-	return convert_zmatrix_to_coordinates(zmat_string)
+	var conversion = convert_zmatrix_to_coordinates(zmat_string)
+	conversion["filename"] = last_selected_filename  # Include filename
+	return conversion
 	
-func import_xyz():
+func import_xyz() -> Dictionary:
 	content_load_error=false
 	var xyz_string=await read_xyz_from_files()
-	return convert_coordinates_to_zmatrix(xyz_string)
+	var conversion=convert_coordinates_to_zmatrix(xyz_string)
+	conversion["filename"]=last_selected_filename 
+	return conversion
 	
 func export_molecule(xyz_string:String)->void:
 	#converrt xyz to z matrix string

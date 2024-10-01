@@ -366,7 +366,6 @@ uv1_scale = Vector3(10, 10, 10)
 
 [node name="EntityManager" type="Node"]
 script = ExtResource("1_xjd2p")
-doc_mgr_script = null
 
 [node name="StartMenu" type="CanvasLayer" parent="."]
 

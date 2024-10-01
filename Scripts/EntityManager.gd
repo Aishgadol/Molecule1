@@ -27,13 +27,18 @@ func _process(delta: float) -> void:
 		_on_import_zmat_pressed()
 
 func _on_import_zmat_pressed()->void:
-	var outputs=await doc_mgr.read_zmat_from_files()
-	var res=doc_mgr.convert_zmatrix_to_coordinates(outputs)
-	#res is dictionry, {res.zmat, res.xyz} where:
-	#res.zmat is str and res.xyz is dict: {"xyz":str , "bonds":[ [atom_i,atom_j] , [atom_k,atom_m] ...]}
+	var res = await doc_mgr.import_zmat()
+	print (res.zmat)
+	print (res.bonds)
+	print (res.filename)
+	#res is dictionry, {res.zmat, res.xyz,res.bonds, res.filename} where:
+	#res.zmat is str, res.xyz is str, res.bonds
+	# {"xyz":str , "bonds":[ [atom_i,atom_j] , [atom_k,atom_m] ...]}
+	
 	#zmat_molecules.append(res.zmat)
 	#xyz_molecules.append(res.xyz)
-	displayed_molecules.append(build_mol(res.xyz))
+	
+	#displayed_molecules.append(build_mol(res.xyz))
 	
 func _on_import_xyz_pressed()->void:
 	var outputs=await doc_mgr.read_xyz_from_files #(outputs is simply in xyz format)
