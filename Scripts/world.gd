@@ -37,14 +37,14 @@ func _process(delta: float) -> void:
 		
 	if Input.is_action_just_pressed("ui_select") and paused and !fileExplorerDisplaying: 
 		fileExplorerDisplaying=true
-		var outputs=await doc_mgr.read_zmat_from_files()
+		'''var outputs=await doc_mgr.read_zmat_from_files()
 		var res=doc_mgr.convert_zmatrix_to_coordinates(outputs)
 		for r in res.coordinates:
 			print(r)
 		print("Adjancies: ")
 		for r in res.bonds:
 			print(r)
-		fileExplorerDisplaying=false
+		fileExplorerDisplaying=false'''
 		
 	if Input.is_action_just_pressed("pause") and fileExplorerDisplaying:
 		fileExplorerDisplaying=false

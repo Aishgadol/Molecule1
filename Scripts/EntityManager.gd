@@ -3,7 +3,14 @@ extends Node
 
 @export var doc_mgr_script :Resource=preload("res://Scripts/DocumentManager.gd")
 
-var molecules = [] #stored in < z-matrix > format (for now)
+#  |    |  |  |    |
+#  \/  \/ \/  \/   \/
+var zmat_molecules = [] #zmat: string
+var xyz_molecules=[] #xyz: dict: {"xyz":str , "bonds":[ [atom_i,atom_j] , [atom_k,atom_m] ...]}
+# ^^^^ these two might not be necesary cuz if mol changes, they need to change too,
+# too much work updating for every little change :(
+
+var displayed_molecules=[] #displayable items for world display
 var doc_mgr
 
 # Called when the node enters the scene tree for the first time.
@@ -22,7 +29,13 @@ func _process(delta: float) -> void:
 func _on_import_zmat_pressed()->void:
 	var outputs=await doc_mgr.read_zmat_from_files()
 	var res=doc_mgr.convert_zmatrix_to_coordinates(outputs)
-	#res is dictionry, res.coordinates: dict --> "symbol":"position" and res.bonds: arrays of size 2 
-	molecules.append(outputs)
-	var new_molecule=createMolecule(res)
+	#res is dictionry, {res.zmat, res.xyz} where:
+	#res.zmat is str and res.xyz is dict: {"xyz":str , "bonds":[ [atom_i,atom_j] , [atom_k,atom_m] ...]}
+	#zmat_molecules.append(res.zmat)
+	#xyz_molecules.append(res.xyz)
+	displayed_molecules.append(build_mol(res.xyz))
+	
+func _on_import_xyz_pressed()->void:
+	var outputs=await doc_mgr.read_xyz_from_files #(outputs is simply in xyz format)
+	var res=doc_mgr.convert_xyz_to_zmat(outputs)
 	

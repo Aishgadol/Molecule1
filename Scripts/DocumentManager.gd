@@ -1,7 +1,9 @@
 class_name DocumentManager
 extends Node
 
-var loaded_zmat:String=""
+var working_with:String=""
+var loaded_info:String=""
+var content_load_error:bool=false
 signal file_dialog_done
 
 var script_path:String
@@ -19,9 +21,15 @@ func run()->void:
 func read_zmat_from_files() -> String:
 	open_zmatrix_file()
 	await file_dialog_done
-	return loaded_zmat
+	return loaded_info
+	
+func read_xyz_from_files()->String:
+	open_xyz_file()
+	await file_dialog_done
+	return loaded_info
 	
 func open_zmatrix_file() -> void:
+	working_with="zmat"
 	var file_dialog = FileDialog.new()
 	file_dialog.access = FileDialog.ACCESS_FILESYSTEM
 	file_dialog.mode = FileDialog.FILE_MODE_OPEN_FILES
@@ -32,24 +40,46 @@ func open_zmatrix_file() -> void:
 	add_child(file_dialog)
 	file_dialog.popup_centered()
 	
+func open_xyz_file()->void:
+	working_with="xyz"
+	var file_dialog = FileDialog.new()
+	file_dialog.access = FileDialog.ACCESS_FILESYSTEM
+	file_dialog.mode = FileDialog.FILE_MODE_OPEN_FILES
+	file_dialog.set_size(Vector2(400,300))
+	file_dialog.filters = ["*.csv", "*.txt", "*.xyz"]
+	file_dialog.connect("popup_hide", Callable(self, "_on_file_dialog_closed"))
+	file_dialog.connect("file_selected", Callable(self, "_on_file_selected"))
+	add_child(file_dialog)
+	file_dialog.popup_centered()
 	
 func _on_file_dialog_closed() -> void:
-	loaded_zmat=""
+	loaded_info=""
 	emit_signal("file_dialog_done")
 	
 func _on_file_selected(file_path: String) -> void:
 	var content = load_file_content(file_path)
-	if content != null and is_valid_zmatrix(content):
-		loaded_zmat=content
+	if(content_load_error):
+		print("Invalid Z-matrix/XYZ format or no file selected.")
+		loaded_info=""
+		return
+	if content != null:
+		if working_with == "zmat" and is_valid_zmatrix(content):
+			loaded_info=content
+		elif working_with=="xyz" and is_valid_xyz(content):
+			loaded_info=content
+		else:
+			print("Invalid Z-matrix/XYZ format or no file selected.")		
+			loaded_info=""
 	else:
-		print("Invalid Z-matrix format or no file selected.")
-		loaded_zmat=""
+		print("Invalid Z-matrix/XYZ format or no file selected.")
+		loaded_info=""
 	
 	emit_signal("file_dialog_done")
 	
 func load_file_content(file_path: String) -> String:
 	var file_extension = file_path.get_extension().to_lower()
 	if file_extension != "csv" and file_extension != "txt" and file_extension != "zmat" and file_extension != "xyz":
+			content_load_error=true
 			return "Wrong File Format"
 	var file = FileAccess.open(file_path,FileAccess.READ)
 	if file != null:
@@ -57,6 +87,7 @@ func load_file_content(file_path: String) -> String:
 		file.close()
 		return content
 	else:
+		content_load_error=true
 		return ""
 
 func is_valid_zmatrix(content: String) -> bool:
@@ -88,6 +119,55 @@ func is_valid_zmatrix(content: String) -> bool:
 				return false
 	return true
 
+func is_valid_xyz(content: String) -> bool:
+	var lines = content.strip_edges().split("\n", false)
+	var non_empty_lines = []
+	
+	# Remove carriage returns and strip edges
+	for line in lines:
+		line = line.replace("\r", "").strip_edges()
+		if line == "":
+			continue  # Skip empty lines
+		non_empty_lines.append(line)
+	
+	var line_count = non_empty_lines.size()
+	
+	# There must be at least two lines: the atom count and the comment line
+	if line_count < 2:
+		return false
+	
+	# First line should be an integer representing the number of atoms
+	var num_atoms_line = non_empty_lines[0]
+	if not num_atoms_line.is_valid_integer():
+		return false
+	var num_atoms = int(num_atoms_line)
+	if num_atoms < 1:
+		return false  # Number of atoms should be positive
+	
+	# Total lines should be equal to num_atoms + 2 (atom count line + comment line + atom lines)
+	if line_count != num_atoms + 2:
+		return false
+	
+	# Iterate over atom lines and validate
+	for i in range(2, line_count):
+		var tokens0 = non_empty_lines[i].split(" ", false)
+		var tokens=[]
+		# Remove any empty tokens caused by multiple spaces
+		for token in tokens0:
+			if token!="":
+				tokens.append(token)
+				
+		if tokens.size() != 4:
+			return false
+		var symbol = tokens[0]
+		var x = tokens[1]
+		var y = tokens[2]
+		var z = tokens[3]
+		# Validate that x, y, z are valid floating-point numbers
+		if not x.is_valid_float() or not y.is_valid_float() or not z.is_valid_float():
+			return false
+	return true
+	
 func extract_bonds_from_zmatrix(content: String) -> Array:
 	var bonds = []
 	var lines = content.strip_edges().split("\n", false)
@@ -112,31 +192,25 @@ func extract_bonds_from_zmatrix(content: String) -> Array:
 	return bonds
 
 func convert_zmatrix_to_coordinates(z_matrix_string: String) -> Dictionary:
-	var coordinates = []
-	var bonds = []
-	var zmat_file_path = "user://temp_zmat.zmat"  # Changed to user:// for export compatibility
-
-	# Write the Z-matrix string to a temporary file using FileAccess
+	var zmat_file_path = "user://temp_zmat.zmat"  # Path to store the Z-matrix
+	
+	# Write the Z-matrix string to a temporary file
 	var zmat_file = FileAccess.open(zmat_file_path, FileAccess.WRITE)
 	if zmat_file == null:
 		push_error("Failed to write Z-matrix to temporary file.")
-		return coordinates
+		return {}
 	zmat_file.store_string(z_matrix_string)
 	zmat_file.close()
-
+	
 	# Get absolute paths
 	var zmat_file_global = ProjectSettings.globalize_path(zmat_file_path)
 	var script_path = ProjectSettings.globalize_path("res://gc.py")
 	var python_executable = "python"  # Update this if Python is not in your PATH
-
-	# Debugging: Print the paths and arguments to verify
-	print("Z-matrix file path:", zmat_file_global)
-	print("Python script path:", script_path)
 	
 	# Prepare arguments for the Python script
 	var args = PackedStringArray([script_path, "-zmat", zmat_file_global])
 	print("Arguments passed to Python:", args)
-
+	
 	# Run the Python script using OS.execute()
 	var output = []
 	var exit_code = OS.execute(python_executable, args, output, true)  # 'true' to capture stderr
@@ -146,84 +220,37 @@ func convert_zmatrix_to_coordinates(z_matrix_string: String) -> Dictionary:
 		push_error("Python script execution failed with exit code: %d" % exit_code)
 		for x in output:
 			push_error("Error output: %s" % (x + "\n"))
-		return {"coordinates":{}, "bonds":{}}
+		return {}
 	
-	# Get the output from the process
-	var stdout:String=""
-	for i in range(output.size()):
-		output[i]+="\n"
-		stdout+=output[i]
-	#var stdout:String = String(output)
-	var lines = stdout.strip_edges().split("\n")
-	#for l in lines:
-		#print( l )  # Debug print to see each line
+	# Get the XYZ string from the output
+	var xyz_string = ""
+	for line in output:
+		xyz_string += line + "\n"
+	xyz_string = xyz_string.strip_edges()
 	
-	if lines.size() < 3:
-		push_error("Invalid output from Python script.")
-		return {"coordinates":{}, "bonds":{}}
-
-	var num_atoms = int(lines[0])
-	var title_line = lines[1]
+	# Extract bonds from the Z-matrix
+	var bonds = extract_bonds_from_zmatrix(z_matrix_string)
 	
-	if lines.size() < num_atoms + 2:
-		push_error("Incomplete atom data in output.")
-		return {"coordinates":{}, "bonds":{}}
-
-	# Extract atom coordinates
-	for i in range(2, 2 + num_atoms):
-		var line = lines[i].strip_edges()
-		
-		if line == "":
-			print("Line is empty, skipping...")
-			continue
-		
-		line = line.replace("\t", " ")  # Replace tabs with spaces
-		line = line.replace("\r", " ")  # Replace carriage returns with spaces
-		line = line.replace("  ", " ")  # Ensure multiple spaces are reduced to one
-		
-		# Split the cleaned line
-		var tokens = line.split(" ", false)  # Split by single spaces
-		
-		if tokens.size() != 4:
-			push_error("Invalid atom line: %s" % line)
-			continue
-		
-		var symbol = tokens[0]
-		var z = float(tokens[1])
-		var x = float(tokens[2])
-		var y = float(tokens[3])
-		#print("Adding atom: symbol=%s, x=%f, y=%f, z=%f" % [symbol, x, y, z])  # Debug print
-		
-		coordinates.append({
-			"symbol": symbol,
-			"position": Vector3(x, y, z),
-		})
-
 	# Clean up temporary files
-	var dir = DirAccess.open("user://")  # Ensure user:// is being used
+	var dir = DirAccess.open("user://")
 	if dir:
 		dir.remove("temp_zmat.zmat")
 	
-	bonds=extract_bonds_from_zmatrix(z_matrix_string)
-	
-	return {"coordinates":coordinates, "bonds":bonds}
+	# Return the dictionary in the requested format
+	return {
+		"zmat": z_matrix_string,
+		"xyz": xyz_string,
+		"bonds": bonds
+	}
 
-func convert_coordinates_to_zmatrix(cartesian_string: String) -> String:
-	var zmat_string = ""
+func convert_coordinates_to_zmatrix(cartesian_string: String) -> Dictionary:
 	var xyz_file_path = "user://temp_xyz.xyz"  # Path to store the Cartesian coordinates
 
-	# Clean the input string to ensure proper formatting
-	cartesian_string = cartesian_string.replace("\t", " ")  # Replace tabs with spaces
-	cartesian_string = cartesian_string.replace("\r", " ")  # Replace carriage returns with spaces
-	while cartesian_string.find("  ") != -1:  # Replace multiple spaces with a single space
-		cartesian_string = cartesian_string.replace("  ", " ")
-	
-	# Write the cleaned Cartesian string to a temporary XYZ file using FileAccess
+	# Write the Cartesian string to a temporary XYZ file
 	var xyz_file = FileAccess.open(xyz_file_path, FileAccess.WRITE)
 	if xyz_file == null:
 		push_error("Failed to write Cartesian coordinates to temporary file.")
-		print("file null")
-		return zmat_string
+		return {}
 	xyz_file.store_string(cartesian_string)
 	xyz_file.close()
 
@@ -241,24 +268,87 @@ func convert_coordinates_to_zmatrix(cartesian_string: String) -> String:
 	var exit_code = OS.execute(python_executable, args, output, true)  # 'true' to capture stderr
 
 	# Check for errors during execution
-	if exit_code < 0:
+	if exit_code != 0:
 		push_error("Python script execution failed with exit code: %d" % exit_code)
-		print("exitcode")
 		for x in output:
 			push_error("Error output: %s" % (x + "\n"))
-		return zmat_string
+		return {}
 
-	# Get the output from the process
-	var stdout:String = ""
-	for i in range(output.size()):
-		stdout += output[i] + "\n"
-	
-	# The output is expected to be the Z-matrix
-	zmat_string = stdout.strip_edges()
+	# Get the Z-matrix string from the output
+	var zmat_string = ""
+	for line in output:
+		zmat_string += line + "\n"
+	zmat_string = zmat_string.strip_edges()
+
+	# Extract bonds from the Z-matrix
+	var bonds = extract_bonds_from_zmatrix(zmat_string)
 
 	# Clean up temporary files
 	var dir = DirAccess.open("user://")
 	if dir:
 		dir.remove("temp_xyz.xyz")
 
-	return zmat_string
+	# Return the dictionary in the requested format
+	return {
+		"xyz": cartesian_string,
+		"zmat": zmat_string,
+		"bonds": bonds
+	}
+
+
+func import_zmat():
+	content_load_error=false
+	var zmat_string=await read_zmat_from_files()
+	return convert_zmatrix_to_coordinates(zmat_string)
+	
+func import_xyz():
+	content_load_error=false
+	var xyz_string=await read_xyz_from_files()
+	return convert_coordinates_to_zmatrix(xyz_string)
+	
+func export_molecule(xyz_string:String)->void:
+	#converrt xyz to z matrix string
+	var result = convert_coordinates_to_zmatrix(xyz_string)
+	var zmat_string:String=""
+	if "zmat" in result:
+		zmat_string=result["zmat"]
+	else:
+		push_error("failed to convert xyz to z matrix format")
+		return
+	
+	#open file dialog to let user choose save location
+	if zmat_string != "":
+		var file_dialog = FileDialog.new()
+		file_dialog.access = FileDialog.ACCESS_FILESYSTEM
+		file_dialog.mode = FileDialog.FILE_MODE_SAVE_FILE
+		file_dialog.filters = ["*.xyz"]
+		add_child(file_dialog)
+		
+		file_dialog.connect("file_selected", Callable(self, "_on_export_file_selected").bind(xyz_string,zmat_string))
+		file_dialog.popup_centered()
+	
+func _on_export_file_selected(file_path:String, xyz_string:String,zmat_string:String)->void:
+	#ensure filename is clean
+	var filename=file_path.get_basename()
+	var directory=file_path.get_base_dir()
+	
+	#save xyz string to filename.xyz
+	var xyz_file_path="%s/%s.xyz" % [directory,filename]
+	var xyz_file= FileAccess.open(xyz_file_path,FileAccess.WRITE)
+	if xyz_file == null:
+		push_error("failed to create xyz file")
+	else:
+		xyz_file.store_string(xyz_string)
+		xyz_file.close()
+	
+	#save zmat string to filename.zmat
+	var zmat_file_path="%s/%s.zmat" %[directory,filename]
+	var zmat_file=FileAccess.open(zmat_file_path, FileAccess.WRITE)
+	if zmat_file==null:
+		push_error("Failed to create zmat file")
+	else:
+		zmat_file.store_string(zmat_string)
+		zmat_file.close()
+	
+	print("Files saved: \n%s\n%s" % [xyz_file_path, zmat_file_path])
+	

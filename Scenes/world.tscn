@@ -1,4 +1,4 @@
-[gd_scene load_steps=28 format=3 uid="uid://cs24c6bcipuux"]
+[gd_scene load_steps=29 format=3 uid="uid://cs24c6bcipuux"]
 
 [ext_resource type="Texture2D" uid="uid://d3qoet7kbkvxj" path="res://Textures/woodfloor.jpg" id="1_o1cb3"]
 [ext_resource type="Script" path="res://Scripts/world.gd" id="1_sier2"]
@@ -6,6 +6,7 @@
 [ext_resource type="PackedScene" uid="uid://uoq5r2lvraly" path="res://Scenes/player.tscn" id="2_1d3v8"]
 [ext_resource type="PackedScene" uid="uid://p42ftxav826i" path="res://Scenes/pause_menu.tscn" id="5_4j80j"]
 [ext_resource type="PackedScene" uid="uid://id1b0i4dbwx3" path="res://Scenes/atom.tscn" id="5_x7o8f"]
+[ext_resource type="Script" path="res://Scripts/EntityManager.gd" id="7_7ladw"]
 [ext_resource type="Script" path="res://Scripts/DocumentManager.gd" id="7_bx2qa"]
 
 [sub_resource type="PanoramaSkyMaterial" id="PanoramaSkyMaterial_0ivgh"]
@@ -232,7 +233,10 @@ mesh = SubResource("SphereMesh_g0hb2")
 [node name="PauseMenu" parent="." instance=ExtResource("5_4j80j")]
 visible = false
 
-[node name="DocumentManager" type="Node" parent="."]
+[node name="EntityManager" type="Node" parent="."]
+script = ExtResource("7_7ladw")
+
+[node name="DocumentManager" type="Node" parent="EntityManager"]
 script = ExtResource("7_bx2qa")
 
 [connection signal="pressed" from="PauseMenu/MainPauseMenu/VBoxContainer/BackToMainButton2" to="." method="_on_back_to_main_button_pressed"]
