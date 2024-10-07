@@ -1,16 +1,23 @@
 class_name DocumentManager
 extends Node
 
+@onready var entityManager:EntityManager=$EntityManager
+
+var myCall:Callable=Callable(self, "_on_file_selected")
 var file_dialog: FileDialog=null
 var working_with:String=""
 var loaded_info:String=""
 var content_load_error:bool=false
 signal file_dialog_done
+signal done_reading_from_files
 
 var last_selected_filename:String=""
 var script_path:String
 var script_path_global:String
 
+func _ready()->void:
+	pass
+		
 func run()->void:
 	print("okay lets go doc mgr")
 	script_path = "res://gc.py"
@@ -20,44 +27,50 @@ func run()->void:
 	else:
 		print("Python script 'gc.py' found at path: %s" % script_path_global)
 		
-func read_zmat_from_files() -> String:
-	open_zmatrix_file()
+func _process(delta:float):
+	if Input.is_action_just_pressed("importZmat"):
+		script_path = "res://gc.py"
+		script_path_global = ProjectSettings.globalize_path(script_path)
+		if !FileAccess.file_exists(script_path_global):
+			push_error("Python script 'gc.py' not found at path: %s" % script_path_global)
+		else:
+			print("Python script 'gc.py' found at path: %s" % script_path_global)
+			
+		open_file("zmat")
+		await file_dialog_done
+		if(loaded_info!=""):
+			entityManager.newMol(convert_zmatrix_to_coordinates(loaded_info))
+			
+			
+func read_zmat_from_files():
+	open_file("zmat")
 	await file_dialog_done
-	return loaded_info
+	emit_signal("done_reading_from_files")
 	
 func read_xyz_from_files()->String:
-	open_xyz_file()
+	open_file("xyz")
 	await file_dialog_done
 	return loaded_info
 	
-func open_zmatrix_file() -> void:
-	working_with="zmat"
+func open_file(type:String) -> void:
+	working_with=type
 	file_dialog = FileDialog.new()
 	file_dialog.access = FileDialog.ACCESS_FILESYSTEM
-	file_dialog.set_file_mode(FileDialog.FILE_MODE_OPEN_FILES)
+	file_dialog.set_file_mode(FileDialog.FILE_MODE_OPEN_FILE)
 	file_dialog.set_size(Vector2(400,300))
-	file_dialog.filters = ["*.csv", "*.txt", "*.zmat"]
-	file_dialog.connect("popup_hide", Callable(self, "_on_file_dialog_closed"))
-	file_dialog.connect("file_selected", Callable(self, "_on_file_selected"))
+	if(type=="zmat"):
+		file_dialog.filters = ["*.csv", "*.txt", "*.zmat"]
+	elif(type=="xyz"):
+		file_dialog.filters = ["*.csv", "*.txt", "*.xyz"]
+	else:
+		return
+	
+	var connected= file_dialog.connect("file_selected", Callable(self, "_on_file_selected"))
+	if connected != OK:
+		print("failed to connect FILE")
 	add_child(file_dialog)
 	file_dialog.popup_centered()
-	
-func open_xyz_file()->void:
-	working_with="xyz"
-	file_dialog = FileDialog.new()
-	file_dialog.access = FileDialog.ACCESS_FILESYSTEM
-	file_dialog.set_file_mode(FileDialog.FILE_MODE_OPEN_FILES)
-	file_dialog.set_size(Vector2(400,300))
-	file_dialog.filters = ["*.csv", "*.txt", "*.xyz"]
-	file_dialog.connect("popup_hide", Callable(self, "_on_file_dialog_closed"))
-	file_dialog.connect("file_selected", Callable(self, "_on_file_selected"))
-	add_child(file_dialog)
-	file_dialog.popup_centered()
-	
-func _on_file_dialog_closed() -> void:
-	loaded_info=""
-	file_dialog.queue_free()
-	emit_signal("file_dialog_done")
+
 	
 func _on_file_selected(file_path: String) -> void:
 	last_selected_filename=file_path.get_file()
@@ -65,7 +78,7 @@ func _on_file_selected(file_path: String) -> void:
 	if(content_load_error):
 		print("Invalid Z-matrix/XYZ format or no file selected.")
 		loaded_info=""
-		file_dialog.queue_free()
+		#file_dialog.queue_free()
 		return
 	if content != null:
 		if working_with == "zmat" and is_valid_zmatrix(content):
@@ -79,12 +92,12 @@ func _on_file_selected(file_path: String) -> void:
 		print("Invalid Z-matrix/XYZ format or no file selected.")
 		loaded_info=""
 	
-	file_dialog.queue_free()
+	#file_dialog.queue_free()
 	emit_signal("file_dialog_done")
 	
 func load_file_content(file_path: String) -> String:
 	var file_extension = file_path.get_extension().to_lower()
-	if file_extension != "csv" and file_extension != "txt" and file_extension != "zmat" and file_extension != "xyz":
+	if (file_extension != "csv" and file_extension != "txt" and file_extension != "zmat" and working_with=="zmat") or (file_extension != "csv" and file_extension != "txt" and file_extension != "zmat" and working_with=="xyz") or working_with=="":
 			content_load_error=true
 			return "Wrong File Format"
 	var file = FileAccess.open(file_path,FileAccess.READ)
@@ -97,7 +110,6 @@ func load_file_content(file_path: String) -> String:
 		return ""
 
 func is_valid_zmatrix(content: String) -> bool:
-	
 	var lines = content.strip_edges().split("\n", false)
 	var line_count = 0
 	for line in lines:
@@ -197,6 +209,11 @@ func extract_bonds_from_zmatrix(content: String) -> Array:
 					bonds.append(bond)
 	return bonds
 
+#return {
+#		"zmat": z_matrix_string,
+#		"xyz": xyz_string,
+#		"bonds": bonds
+#	} --->
 func convert_zmatrix_to_coordinates(z_matrix_string: String) -> Dictionary:
 	var zmat_file_path = "user://temp_zmat.zmat"  # Path to store the Z-matrix
 	
@@ -249,6 +266,12 @@ func convert_zmatrix_to_coordinates(z_matrix_string: String) -> Dictionary:
 		"bonds": bonds
 	}
 
+
+#return {
+#		"zmat": z_matrix_string,
+#		"xyz": caertesian_string,
+#		"bonds": bonds
+#	} --->
 func convert_coordinates_to_zmatrix(cartesian_string: String) -> Dictionary:
 	var xyz_file_path = "user://temp_xyz.xyz"  # Path to store the Cartesian coordinates
 
@@ -302,10 +325,12 @@ func convert_coordinates_to_zmatrix(cartesian_string: String) -> Dictionary:
 	}
 
 
-func import_zmat():
+func import_zmat() -> Dictionary:
 	content_load_error=false
-	var zmat_string=await read_zmat_from_files()
-	var conversion = convert_zmatrix_to_coordinates(zmat_string)
+	read_zmat_from_files()
+	await done_reading_from_files
+	print("got zmat string: ",loaded_info)
+	var conversion = convert_zmatrix_to_coordinates(loaded_info)
 	conversion["filename"] = last_selected_filename  # Include filename
 	return conversion
 	

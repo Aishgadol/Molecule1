@@ -1,4 +1,0 @@
-[gd_scene format=3 uid="uid://canhypxdavmvh"]
-
-[node name="molecule" type="RigidBody3D"]
-gravity_scale = 0.0

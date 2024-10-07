@@ -6,6 +6,7 @@ extends Control
 @onready var music_on_off_button=$OptionMenu/VBoxContainer/HBoxContainer/MusicOnOffButton
 @onready var vBox=$MainMenu/VBoxContainer
 @onready var colorRect=$ColorRect
+
 var musicOn=true;
 var way = 1
 
@@ -14,6 +15,7 @@ func _ready() -> void:
 	print("okay lets go mainmenuscript")
 	audio_player.volume_db=-12
 	audio_player.play() # Replace with function body.
+	
 	
 	
 
@@ -33,15 +35,13 @@ func _on_start_button_pressed() -> void:
 		if child is Button:
 			child.disabled=true
 		
-			
-			
 	anim_player.play("camera_trans")
 	
 	await anim_player.animation_finished
 	#audio_player.stop()
 	menu_camera.stop_camera_movement()
-	get_tree().change_scene_to_file("res://Scenes/world.tscn")
-	
+	get_tree().change_scene_to_file("res://Scenes/test_main_scene.tscn")
+	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	#print("done playing")
 
 

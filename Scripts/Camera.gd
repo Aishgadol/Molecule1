@@ -25,7 +25,7 @@ var time_passed :float =0.0  #auxiliry var to help with graduale aura color chan
 
 func _ready():
 	# Hide the mouse cursor and capture it
-	Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+	#Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
 	ray_cast=$RayCast3D
 	
 
