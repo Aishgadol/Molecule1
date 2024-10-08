@@ -36,8 +36,18 @@ func _process(delta:float):
 		else:
 			print("Python script 'gc.py' found at path: %s" % script_path_global)
 			
+			
+		#this segement is for "cleanup" before reading new file
+		for child in get_children():
+			if child.name.contains("File"):
+				child.queue_free()
+		loaded_info=""
+		content_load_error=false
+		
+		
 		open_file("zmat")
 		await file_dialog_done
+		
 		if(loaded_info!=""):
 			entityManager.newMol(convert_zmatrix_to_coordinates(loaded_info))
 			
@@ -66,6 +76,7 @@ func open_file(type:String) -> void:
 		return
 	
 	var connected= file_dialog.connect("file_selected", Callable(self, "_on_file_selected"))
+	
 	if connected != OK:
 		print("failed to connect FILE")
 	add_child(file_dialog)
@@ -94,6 +105,9 @@ func _on_file_selected(file_path: String) -> void:
 	
 	#file_dialog.queue_free()
 	emit_signal("file_dialog_done")
+	
+func _on_file_dialog_closed(file_dialog):
+	file_dialog.queue_free()
 	
 func load_file_content(file_path: String) -> String:
 	var file_extension = file_path.get_extension().to_lower()

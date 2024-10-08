@@ -5,6 +5,7 @@ extends Node3D
 @onready var camera = $World/Player/PlayerCamera
 @onready var level=$World/Level
 @onready var floor=$World/Level/Floor/CSGCylinder3D
+@onready var crosshair=$World/Player/CanvasLayer/TextureRect
 @onready var going_back=false
 @export var doc_mgr_script :Resource=preload("res://Scripts/DocumentManager.gd")
 @onready var explosion_scene:PackedScene =preload("res://Scenes/vfx_explosion.tscn")
@@ -17,7 +18,7 @@ var fileExplorerDisplaying:bool=false
 func _ready() ->void:
 	camera.set_root(self)
 	print("okay lets go world")
-	
+	crosshair.visible=true
 	camera.rotation_degrees=Vector3(45,105,0)
 	
 	
@@ -30,8 +31,11 @@ func _process(delta: float) -> void:
 		pause_menu.visible = paused
 		if paused:
 			Input.set_mouse_mode(Input.MOUSE_MODE_VISIBLE)
+			crosshair.visible=false
 		else:
 			Input.set_mouse_mode(Input.MOUSE_MODE_CAPTURED)
+			crosshair.visible=true
+			
 		
 		camera.set_paused_state(paused)  # Notify the camera script of the pause state
 		
@@ -112,3 +116,8 @@ func check_for_merge(released_object):
 				explosion_instance.queue_free()
 				#explosion_instance.queue_free()
 				break
+
+
+func spawn_molecule(mol : Node3D):
+	level.add_child(mol)
+	mol.transform.origin=Vector3(15.0,15.0,15.0)
