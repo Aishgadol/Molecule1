@@ -119,9 +119,11 @@ func buildMol(mol_data: Dictionary) -> Node3D:
 	var mol:Node3D=Node3D.new()
 	mol.name="mol_"+str(mol_counter)
 	mol.add_to_group("grabbable")
+	mol.add_to_group("mergeable")
 	
 	var molbody=RigidBody3D.new()
 	molbody.gravity_scale=0
+	molbody.sleeping=false
 	molbody.name="molbody_"+str(mol_counter)
 	mol.add_child(molbody)
 	
@@ -140,11 +142,13 @@ func buildMol(mol_data: Dictionary) -> Node3D:
 		var atom=atoms[i]
 		var symbol=atom["symbol"]
 		var pos=atom["position"]
+		print("adding atom no. ",i," with symbol: ",symbol," at position: ",pos)
 		
 		var atom_mesh=MeshInstance3D.new()
 		atom_mesh.name="atom{0}_mesh".format([i+1])
 		atom_mesh.transform.origin=pos
 		atom_mesh.mesh=get_atom_mesh()
+		atom_mesh.material_override=StandardMaterial3D.new()
 		molbody.add_child(atom_mesh)
 		
 		var atom_label=Label3D.new()
@@ -187,6 +191,7 @@ func buildMol(mol_data: Dictionary) -> Node3D:
 		tube_mesh.name="tube_mesh{1}_{2}".format({"1":index1+1,"2":index2+1})
 		tube_mesh.mesh=get_tube_mesh((pos1-pos2).length())
 		tube_mesh.transform=get_tube_transform(pos1,pos2)
+		tube_mesh.material_override=StandardMaterial3D.new()
 		molbody.add_child(tube_mesh)
 		
 		#tube collision
@@ -207,10 +212,6 @@ func buildMol(mol_data: Dictionary) -> Node3D:
 		tube_aura.material_override=get_aura_material()
 		tube_aura.transform=get_tube_transform(pos1,pos2)
 		aura_node.add_child(tube_aura)
-		
-	return mol
-	
-	
-	
 	mol_counter+=1
 	return mol
+	
