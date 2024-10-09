@@ -233,6 +233,9 @@ mesh = SubResource("SphereMesh_g0hb2")
 [node name="PauseMenu" parent="." instance=ExtResource("5_4j80j")]
 visible = false
 
+[node name="Label" parent="PauseMenu" index="5"]
+layout_mode = 0
+
 [node name="EntityManager" type="Node" parent="."]
 script = ExtResource("7_7ladw")
 

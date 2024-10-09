@@ -12,6 +12,16 @@ var xyz_molecules=[] #xyz: dict: {"xyz":str , "bonds":[ [atom_i,atom_j] , [atom_
 var size_factor=5.3
 var displayed_molecules=[] #displayable items for world display
 var mol_counter:int=0
+var element_colors = {
+	"H": Color(1, 0, 0),  # Red for Hydrogen
+	"C": Color(0.45, 0.45, 0.45),  # Dark Gray for Carbon
+	"O": Color(1, 1, 1),  # White for Oxygen
+	"N": Color(0, 0, 1),  # Blue for Nitrogen
+	"S": Color(1, 1, 0),  # Yellow for Sulfur
+	"Cl": Color(0, 1, 0),  # Green for Chlorine
+	"X": Color(0,0,0) #black for dummy atoms
+	# Add more elements and their respective colors here
+}
 # Called when the node enters the scene tree for the first time.
 
 #auxilary methods for constructing the 3d node for molecule
@@ -37,6 +47,7 @@ func parse_xyz(xyz_string:String)->Array:
 	
 func get_atom_mesh() ->Mesh:
 	var mesh=SphereMesh.new()
+	mesh.material=StandardMaterial3D.new()
 	mesh.radius=2.0
 	mesh.height=4.0
 	return mesh
@@ -155,6 +166,7 @@ func buildMol(mol_data: Dictionary) -> Node3D:
 	for i in range(len(atoms)):
 		var atom=atoms[i]
 		var symbol=atom["symbol"]
+		var color = element_colors.get(symbol, Color(0.5, 0.5, 0.5))
 		var pos=atom["position"]
 		print("adding atom no. ",i," with symbol: ",symbol," at position: ",pos)
 		
@@ -162,7 +174,7 @@ func buildMol(mol_data: Dictionary) -> Node3D:
 		atom_mesh.name="atom{0}_mesh".format([i+1])
 		atom_mesh.transform.origin=pos
 		atom_mesh.mesh=get_atom_mesh()
-		atom_mesh.material_override=StandardMaterial3D.new()
+		atom_mesh.mesh.material.albedo_color=color
 		molbody.add_child(atom_mesh)
 		
 		var atom_label=Label3D.new()
