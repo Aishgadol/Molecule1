@@ -14,6 +14,7 @@ extends Node3D
 var sphere_radius:float=4.0 #might change later if atoms become smaller/larger
 var paused: bool = false
 var fileExplorerDisplaying:bool=false
+var allowed_spawn:bool =true
 
 func _ready() ->void:
 	camera.set_root(self)
@@ -119,8 +120,10 @@ func check_for_merge(released_object):
 
 
 func spawn_molecule(mol : Node3D):
-	level.add_child(mol)
+	#level.add_child(mol)
 	mol.transform.origin=Vector3(15.0,15.0,15.0)
-	var nodex=level.get_node(NodePath(mol.name))
-	nodex.add_to_group("grabbable")
-	nodex.add_to_group("mergeable")
+	level.add_child(mol)
+	#var nodex=level.get_node(NodePath(mol.name))
+	#mol.add_to_group("grabbable")
+	#mol.add_to_group("mergeable")
+	print(mol.get_groups())

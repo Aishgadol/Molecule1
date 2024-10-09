@@ -37,6 +37,7 @@ func _process(delta):
 		if grabbed_object==null:
 			#try to grab obj
 			if collider:
+				print(collider.name," , ",collider.get_groups())
 				if collider.is_in_group("grabbable"):
 					grabbed_object=collider
 					grab_distance=(grabbed_object.global_transform.origin-global_transform.origin).length()
@@ -58,7 +59,8 @@ func _process(delta):
 			var lerp_value = 0.5* (sin(time_passed) + 1.0)  # Result ranges from 0 to 1
 			aura=grabbed_object.get_node("aura")
 			if aura:
-				aura.mesh.material.albedo_color = white_color.lerp(yellow_color,lerp_value)
+				for child in aura.get_children():
+					child.mesh.material.albedo_color = white_color.lerp(yellow_color, lerp_value)
 				
 			
 	#body is no longer held (LMB unheld)

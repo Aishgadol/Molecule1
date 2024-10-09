@@ -2,7 +2,7 @@ class_name EntityManager
 extends Node
 
 @onready var root:Node3D=$Root
-
+@onready var level=$Root/World/Level
 #  |    |  |  |    |
 #  \/  \/ \/  \/   \/
 var zmat_molecules = [] #zmat: string
@@ -68,6 +68,7 @@ func get_atom_aura_mesh()->Mesh:
 	var mesh=SphereMesh.new()
 	mesh.radius=2.0*1.2
 	mesh.height=4.0*1.2
+	mesh.material=get_aura_material()
 	return mesh
 	
 func get_aura_material() -> StandardMaterial3D:
@@ -94,6 +95,7 @@ func get_tube_aura_mesh(l:float)->Mesh:
 	mesh.top_radius=radius
 	mesh.bottom_radius=radius
 	mesh.height=l
+	mesh.material=get_aura_material()
 	return mesh
 	
 func get_tube_transform(pos1:Vector3,pos2:Vector3)->Transform3D:
@@ -144,7 +146,13 @@ func newMol(mol):
 		
 
 func buildMol(mol_data: Dictionary) -> Node3D:
-	var mol:Node3D=Node3D.new()
+	var mol_to_dup=level.get_node("mol_base")
+	var mol
+	if(mol_to_dup):
+		mol=mol_to_dup.duplicate()
+	else:
+		print("error in duplicating base molecule model")
+		return null
 	mol.name="mol_"+str(mol_counter)
 	mol.add_to_group("grabbable")
 	mol.add_to_group("mergeable")
@@ -153,6 +161,8 @@ func buildMol(mol_data: Dictionary) -> Node3D:
 	molbody.gravity_scale=0
 	molbody.sleeping=false
 	molbody.name="molbody_"+str(mol_counter)
+	molbody.add_to_group("grabbable")
+	molbody.add_to_group("mergeable")
 	mol.add_child(molbody)
 	var atoms = parse_xyz(mol_data["xyz"])
 	
@@ -203,7 +213,7 @@ func buildMol(mol_data: Dictionary) -> Node3D:
 		atom_aura.visible=true;
 		atom_aura.transform.origin=pos
 		atom_aura.mesh=get_atom_aura_mesh()
-		atom_aura.material_override=get_aura_material()
+		#atom_aura.meshmaterial_override=get_aura_material()
 		aura_node.add_child(atom_aura)
 		
 	#create bonds (tubes)
@@ -236,7 +246,7 @@ func buildMol(mol_data: Dictionary) -> Node3D:
 		tube_aura.name="tube_aura{1}_{2}".format({"1":index1+1,"2":index2+1})
 		tube_aura.visible=true
 		tube_aura.mesh=get_tube_aura_mesh((pos1-pos2).length())
-		tube_aura.material_override=get_aura_material()
+		#tube_aura.material_override=get_aura_material()
 		tube_aura.transform=get_tube_transform(pos1,pos2)
 		aura_node.add_child(tube_aura)
 	mol_counter+=1

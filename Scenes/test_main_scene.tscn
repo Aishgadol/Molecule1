@@ -1,8 +1,9 @@
-[gd_scene load_steps=12 format=3 uid="uid://cjo3vy4svoear"]
+[gd_scene load_steps=13 format=3 uid="uid://cjo3vy4svoear"]
 
 [ext_resource type="Script" path="res://Scripts/EntityManager.gd" id="1_shvmo"]
 [ext_resource type="Texture2D" uid="uid://crpj7dsr7xqyu" path="res://Textures/AllSky_Space_AnotherPlanet Equirect.png" id="2_8bbng"]
 [ext_resource type="Texture2D" uid="uid://d3qoet7kbkvxj" path="res://Textures/woodfloor.jpg" id="3_s1k5x"]
+[ext_resource type="PackedScene" uid="uid://bfjs7isbwhnin" path="res://Scenes/mol_base.tscn" id="7_btm2a"]
 [ext_resource type="Script" path="res://Scripts/DocumentManager.gd" id="9_suwk8"]
 [ext_resource type="Script" path="res://Scripts/world.gd" id="10_b73am"]
 [ext_resource type="PackedScene" uid="uid://uoq5r2lvraly" path="res://Scenes/player.tscn" id="11_wdln3"]
@@ -105,6 +106,8 @@ light_size = 0.884
 light_specular = 0.0
 spot_range = 200.0
 spot_angle = 61.5
+
+[node name="mol_base" parent="EntityManager/Root/World/Level" instance=ExtResource("7_btm2a")]
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="EntityManager/Root/World"]
 
