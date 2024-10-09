@@ -121,3 +121,6 @@ func check_for_merge(released_object):
 func spawn_molecule(mol : Node3D):
 	level.add_child(mol)
 	mol.transform.origin=Vector3(15.0,15.0,15.0)
+	var nodex=level.get_node(NodePath(mol.name))
+	nodex.add_to_group("grabbable")
+	nodex.add_to_group("mergeable")

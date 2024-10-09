@@ -9,7 +9,7 @@ var zmat_molecules = [] #zmat: string
 var xyz_molecules=[] #xyz: dict: {"xyz":str , "bonds":[ [atom_i,atom_j] , [atom_k,atom_m] ...]}
 # ^^^^ these two might not be necesary cuz if mol changes, they need to change too,
 # too much work updating for every little change :(
-
+var size_factor=5.3
 var displayed_molecules=[] #displayable items for world display
 var mol_counter:int=0
 # Called when the node enters the scene tree for the first time.
@@ -20,16 +20,44 @@ func parse_xyz(xyz_string:String)->Array:
 	var num_atoms=int(lines[0])
 	var atoms=[]
 	for i in range(2,2+num_atoms):
-		var parts=lines[i].strip_edges().split()
+		var parts=lines[i].strip_edges().split("\t",false)
+		for c in range(parts.size()):
+			parts[c]=parts[c].split(" ",false)[0]
+			#parts[c].strip_edges(true,true)
+		#	part=" h --- +"+part
+		print (parts)
 		if parts.size() >=4:
 			var symbol=parts[0]
-			var x=float(parts[1])
-			var y=float(parts[2])
-			var z=float(parts[3])
+			var x=float(parts[1])*size_factor
+			var y=float(parts[2])*size_factor
+			var z=float(parts[3])*size_factor
 			var atom={"symbol":symbol,"position":Vector3(x,y,z)}
 			atoms.append(atom)
 	return atoms
-
+func is_digit(c):
+	if c>=48 and c<=57:
+		return true
+	return false
+	
+func is_letter(c):
+	if (c>=65 and c<=90) or (c>=97 and c<=122):
+		return true
+	return false
+	
+func smart_split(toSplit: String)->Array:
+	var res=[]
+	var count=0
+	var flag=false
+	for i in toSplit:
+		if(is_digit(i) or is_letter(i)):
+			if(!flag):
+				flag=!flag
+				res.append[""]
+			res[count]+=i
+		flag=!flag
+		count+=1
+	return res
+	
 func get_atom_mesh() ->Mesh:
 	var mesh=SphereMesh.new()
 	mesh.radius=2.0
@@ -110,8 +138,8 @@ func newMol(mol):
 	displayed_molecules.append(mol_node)
 	root.spawn_molecule(mol_node)
 	
-	for x in mol:
-		print(x," :\n",mol[x])
+	#for x in mol:
+		#print(x," :\n",mol[x])
 		
 		
 
@@ -126,7 +154,6 @@ func buildMol(mol_data: Dictionary) -> Node3D:
 	molbody.sleeping=false
 	molbody.name="molbody_"+str(mol_counter)
 	mol.add_child(molbody)
-	
 	var atoms = parse_xyz(mol_data["xyz"])
 	
 	var bonds=mol_data["bonds"]
