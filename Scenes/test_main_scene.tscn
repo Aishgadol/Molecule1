@@ -108,11 +108,20 @@ spot_range = 200.0
 spot_angle = 61.5
 
 [node name="mol_base" parent="EntityManager/Root/World/Level" instance=ExtResource("7_btm2a")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 999, 999, 999)
+visible = false
 
 [node name="AudioStreamPlayer" type="AudioStreamPlayer" parent="EntityManager/Root/World"]
 
 [node name="PauseMenu" parent="EntityManager/Root" instance=ExtResource("12_fbaxy")]
 visible = false
+
+[node name="Label" parent="EntityManager/Root/PauseMenu" index="5"]
+layout_mode = 0
+offset_left = 0.0
+offset_top = 0.0
+offset_right = 307.0
+offset_bottom = 86.0
 
 [connection signal="pressed" from="EntityManager/Root/PauseMenu/MainPauseMenu/VBoxContainer/BackToMainButton2" to="EntityManager/Root" method="_on_back_to_main_button_pressed"]
 

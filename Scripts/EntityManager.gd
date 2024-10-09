@@ -34,29 +34,6 @@ func parse_xyz(xyz_string:String)->Array:
 			var atom={"symbol":symbol,"position":Vector3(x,y,z)}
 			atoms.append(atom)
 	return atoms
-func is_digit(c):
-	if c>=48 and c<=57:
-		return true
-	return false
-	
-func is_letter(c):
-	if (c>=65 and c<=90) or (c>=97 and c<=122):
-		return true
-	return false
-	
-func smart_split(toSplit: String)->Array:
-	var res=[]
-	var count=0
-	var flag=false
-	for i in toSplit:
-		if(is_digit(i) or is_letter(i)):
-			if(!flag):
-				flag=!flag
-				res.append[""]
-			res[count]+=i
-		flag=!flag
-		count+=1
-	return res
 	
 func get_atom_mesh() ->Mesh:
 	var mesh=SphereMesh.new()
@@ -91,7 +68,7 @@ func get_tube_radius()->float:
 	
 func get_tube_aura_mesh(l:float)->Mesh:
 	var mesh=CylinderMesh.new()
-	var radius=get_tube_radius()*1.2
+	var radius=get_tube_radius()*1.5
 	mesh.top_radius=radius
 	mesh.bottom_radius=radius
 	mesh.height=l
@@ -139,7 +116,7 @@ func newMol(mol):
 	var mol_node:Node3D=buildMol(mol)
 	displayed_molecules.append(mol_node)
 	root.spawn_molecule(mol_node)
-	
+	displayed_molecules.append(mol_node)
 	#for x in mol:
 		#print(x," :\n",mol[x])
 		
@@ -250,5 +227,6 @@ func buildMol(mol_data: Dictionary) -> Node3D:
 		tube_aura.transform=get_tube_transform(pos1,pos2)
 		aura_node.add_child(tube_aura)
 	mol_counter+=1
+	mol.visible=true
 	return mol
 	
