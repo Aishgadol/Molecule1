@@ -1,7 +1,7 @@
 # Molecule1: 3D & VR Molecular Simulation Tool
 
 **Course**: Project in Computer Graphics  
-**Degree**: BSc in Computer Science  
+**Project Supervisor**: Roi Poranne
 
 ## Project Overview
 
