@@ -1,7 +1,7 @@
 # Molecule1: 3D & VR Molecular Simulation Tool
 
 **Course**: Project in Computer Graphics  
-**Project Supervisor**: Roi Poranne
+**Project Supervisor**: Dr. Roi Poranne
 
 ## Project Overview
 
@@ -26,7 +26,7 @@
 ### Technical Implementation
 
 - **Data Processing Pipeline**: Molecule1 reads molecular data in Z-matrix format, which is handled through a file-based system. The Godot entity manager generates an input file, which is then processed by an embedded Python script to parse atom coordinates and connectivity data. Output is returned to the same file path for Godot to retrieve, parse, and render within the simulation.
-- **Visual Representation**: Molecules are color-coded by element, with bonds differentiated to highlight single, double, and triple connections. This visual style enhances clarity and allows users to easily distinguish between atoms and bond types.
+- **Visual Representation**: Atoms are color-coded by element type for easy identification, while bonds are displayed as connections between atoms. Bonds differentiation between single, double, or triple bonds will be added in later iterations.
 
 ### Future Improvements
 
