@@ -1,36 +1,77 @@
-# Molecule1: 3D & VR Molecular Simulation Tool
+# Molecule1: Interactive 3D and VR Molecule Builder
 
-**Course**: Project in Computer Graphics  
-**Project Supervisor**: Dr. Roi Poranne
+Molecule1 is a Godot 4 project that lets users explore and build molecular structures in an immersive first-person or VR environment. 3D raycasting enables grabbing, rotating and merging atoms or whole molecules. A lightweight Python backend converts between Z-matrix and Cartesian formats so molecules can be loaded, displayed and exported easily.
 
-## Project Overview
+## Purpose & Objectives
+- **Interactive Visualization**: inspect molecules from any angle and manipulate them in real time.
+- **VR Support**: dual‑controller mode for spatially intuitive grabbing and bonding.
+- **Data Conversion**: accurate XYZ↔Z‑matrix conversion via embedded Python.
+- **Scalability Goal**: maintain smooth frame rates (>60 FPS) with dozens of atoms while keeping memory use modest.
+- **Extensibility**: serve as a base for advanced chemistry simulations and VR teaching aids.
 
-**Molecule1** is an interactive molecular simulator built in Godot, featuring both a first-person 3D mode and a VR mode for an immersive, hands-on approach to molecular visualization. The simulator offers full freedom to explore, manipulate, and merge molecular structures in a dynamic 3D environment, providing insight into molecular geometry and bond structures from every angle.
+## Architecture
+```
+Start Menu → World Scene
+       |                ↘
+       |                  Player (Camera.gd)
+DocumentManager ──▶ EntityManager ──▶ Molecule Nodes
+       │                   │
+       └─ Python gc.py ◀── Z‑matrix/XYZ files
+```
+- **Scenes**: `Scenes/` contains the main world, player rig, menus and visual effects. `test_main_scene.tscn` ties everything together.
+- **Scripts**: `Scripts/` hosts GDScript modules:
+  - `world.gd` orchestrates gameplay, pause logic and merging of grabbed objects.
+  - `Camera.gd` controls first‑person movement and object grabbing.
+  - `DocumentManager.gd` opens file dialogs, validates Z‑matrix/XYZ text and executes `gc.py` for conversions.
+  - `EntityManager.gd` builds molecule meshes, collision shapes and aura highlights from parsed data.
+  - Menu scripts manage the start and pause menus, camera animations and background music.
+- **Python Backend**: `gc.py` and `gcutil.py` implement XYZ↔Z‑matrix conversion using NumPy; Godot spawns this script with OS.execute and parses its output.
+- **Assets**: `Materials/` and `Textures/` supply skyboxes, icons and floor materials. `Scenes/atom.tscn` defines individual atoms used for molecule construction.
 
-## Features and Functionality
+## Installation
+1. Install **Godot 4.x** (GL renderer; tested with features `4.3`).
+2. Ensure **Python 3** with NumPy is available in your PATH.
+3. Clone the repository and install Python requirements:
+```bash
+pip install -r requirements.txt
+```
+4. Optional: set `PYTHON` environment variable if your Python executable is not simply `python`.
 
-### Interactive Control and Freedom of Movement
+## Usage
+### Running the Simulator
+```bash
+# Launch from the project directory
+godot --path .
+```
+When the main menu appears, press **Start** to enter the world. Use WASD to move, mouse to look, and left‑click to grab atoms. Press **Esc** for the pause menu.
 
-- **3D Mode (First-Person)**: Raycasting allows users to grab, position, and rotate molecular structures freely within the 3D space. You can move molecules closer, push them further, or spin them to any orientation, enabling comprehensive inspection of bond angles and molecular geometry.
-- **VR Mode**: Equipped with dual controllers, VR mode provides spatially intuitive interactions. Users can physically reach out, grab, and manipulate molecules, enhancing the perception of depth and structure in a virtual environment. This mode leverages VR’s immersive qualities, making it ideal for understanding 3D relationships and bond connectivity.
-- **Dynamic Bonding**: Bringing molecules close enough triggers automatic bonding based on proximity, allowing users to experiment with molecular interactions and connect structures naturally.
+### Converting Molecule Files
+```bash
+# Convert XYZ file to Z-matrix
+python gc.py -xyz sample.xyz > sample.zmat
+# Convert Z-matrix back to XYZ
+python gc.py -zmat sample.zmat > sample.xyz
+```
+The script prints the converted coordinates to stdout. Use `--rvar`, `--avar` or `--dvar` to output variables instead of numeric values.
 
-### User Interface and Menu Navigation
+## Outputs
+- **Saved Molecules**: exported as `<name>.xyz` and `<name>.zmat` via the pause menu.
+- **Temporary Files**: `user://temp_xyz.xyz` or `user://temp_zmat.zmat` created during conversions.
+- **Game Logs**: Godot standard output for debugging; ensure to capture when running headless.
 
-- **Main Menu**: Features a background animation of the 3D simulation “playground,” along with options for toggling background music, starting the simulator (via a scripted camera transition to the starting position), and quitting the application.
-- **Pause Menu**: Offers options to resume, manage molecules, or return to the main menu with a smooth camera transition. The molecule management submenu allows for:
-  - **Loading Z-Matrix Files**: Supports `.txt` and `.zmat` formats.
-  - **Spawning and Editing**: Instantly load or modify molecular structures within the simulation.
-  - **Saving Molecules**: Export molecules back to Z-matrix format for future use or analysis.
+## Development
+- Run the Python unit tests (if added later) with:
+```bash
+pytest
+```
+- Follow standard GDScript formatting; `gdformat` can be used for linting.
+- Create pull requests against `main` with descriptive messages and ensure the simulator launches without errors.
 
-### Technical Implementation
+## Project Status & Roadmap
+**Alpha** — core gameplay works but bonding rules and advanced VR interactions are minimal. Planned tasks:
+- Differentiate single/double/triple bonds visually.
+- Improve VR grabbing accuracy and haptic feedback.
+- Optimize dynamic loading of large molecules.
 
-- **Data Processing Pipeline**: Molecule1 reads molecular data in Z-matrix format, which is handled through a file-based system. The Godot entity manager generates an input file, which is then processed by an embedded Python script to parse atom coordinates and connectivity data. Output is returned to the same file path for Godot to retrieve, parse, and render within the simulation.
-- **Visual Representation**: Atoms are color-coded by element type for easy identification, while bonds are displayed as connections between atoms. Bonds differentiation between single, double, or triple bonds will be added in later iterations.
-
-### Future Improvements
-
-While this initial implementation focuses on establishing the core interactive and visualization features, future iterations may include:
-- **Optimized Data Handling**: Improving the data pipeline to support real-time updates and enhanced file management.
-- **Expanded VR Features**: Adding finer controls for VR manipulation, such as pressure-sensitive grabbing or distance-based bonding adjustments.
-- **Advanced Molecule Management**: Extending the molecule management menu to include options for creating custom molecules directly within the simulator.
+## License
+No license is currently included. We recommend adopting the MIT License for broad reuse.

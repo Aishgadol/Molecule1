@@ -1,0 +1,2 @@
+# requires Python 3 with NumPy
+numpy==1.26.4
